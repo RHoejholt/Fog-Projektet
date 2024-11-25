@@ -5,28 +5,27 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.orders
 (
-    "Order_ID" integer NOT NULL,
-    date_placed date NOT NULL,
-    "Status" character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    user_id integer,
-    CONSTRAINT orders_pkey PRIMARY KEY ("Order_ID")
-    );
+    order_id serial NOT NULL,
+    date_placed date DEFAULT NOW(),
+    status character varying(64) NOT NULL,
+    user_id integer default NULL,
+    PRIMARY KEY (order_id)
+);
 
 CREATE TABLE IF NOT EXISTS public.users
 (
-    "user_ID" integer NOT NULL,
-    username character varying(32) COLLATE pg_catalog."default" NOT NULL,
-    password character varying(64) COLLATE pg_catalog."default" NOT NULL,
-    role character varying(10) COLLATE pg_catalog."default" NOT NULL,
-    CONSTRAINT users_pkey PRIMARY KEY ("user_ID"),
-    CONSTRAINT "username_Unique" UNIQUE (username)
+    user_id serial NOT NULL,
+    username character varying(64) NOT NULL UNIQUE,
+    password character varying(64) NOT NULL,
+    role character varying(12) NOT NULL,
+    PRIMARY KEY (user_id)
     );
 
 ALTER TABLE IF EXISTS public.orders
-    ADD CONSTRAINT user_id FOREIGN KEY (user_id)
-    REFERENCES public.users ("user_ID") MATCH SIMPLE
+    ADD CONSTRAINT fk FOREIGN KEY (user_id)
+    REFERENCES public.users (user_id) MATCH SIMPLE
     ON UPDATE NO ACTION
-       ON DELETE NO ACTION
+    ON DELETE NO ACTION
     NOT VALID;
 
 END;

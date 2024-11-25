@@ -23,9 +23,11 @@ public class UserController {
         } else if (password == null || confirmPassword == null) {
             ctx.attribute("message", "Venligst udfyld dit kodeord i begge felter.");
             ctx.render("createuser.html");
+        } else if (passwordCheck(ctx, password, confirmPassword)) {
             try {
                 username = username.toLowerCase();
                 UserMapper.createUser(username, password, dbConnection);
+                ctx.attribute("message", "du er nu oprettet");
             } catch (DatabaseException e) {
                 if (e.getMessage().contains("duplicate key value violates unique constraint")) {
                     ctx.attribute("message", "Brugernavnet er allerede i brug. Prøv et andet.");
@@ -36,6 +38,16 @@ public class UserController {
             }
         } else {
             ctx.render("createuser.html");
+        }
+    }
+    private static boolean passwordCheck(Context ctx, String password, String confirmPassword) {
+
+        //Checks if the passwords match at all. Proceeds with code if true.
+        if (!password.equals(confirmPassword)) {
+            ctx.attribute("message", "Kodeord matcher ikke. Prøv igen");
+            return false;
+        } else {
+            return true;
         }
     }
 }
