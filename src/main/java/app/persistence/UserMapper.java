@@ -10,6 +10,7 @@ public class UserMapper {
     public static void createUser(String username, String password, ConnectionPool pool) throws DatabaseException
     {
         String sql = "insert into users (username, password, role) VALUES (?,?,?);";
+        //Hashing and salting passwords for security.
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
         try (Connection connection = pool.getConnection()) {
