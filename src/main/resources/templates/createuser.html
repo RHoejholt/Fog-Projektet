@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create User</title>
+</head>
+<body>
+<div>
+    <!-- opret bruger formular-->
+    <form method="post" action="/createuser" novalidate>
+        <label for="username">E-mail: </label>
+        <input type="email" id="username" name="username"><br><br>
+        <label for="password">Kodeord: </label>
+        <input type="password"  id="password" name="password"><br><br>
+        <label for="confirmpassword">Bekræft kodeord: </label>
+        <input type="password" id="confirmpassword" name="confirmpassword"><br><br>
+        <button type="submit" value="submit">Opret bruger</button>
+    </form>
+    <br>
+    <div th:if="${#ctx.message!=null}" th:text="${#ctx.message}" class="alert alert-warning bg-gradient" role="alert">Fejlbeskeder </div>
+</div>
+</body>
+</html>
