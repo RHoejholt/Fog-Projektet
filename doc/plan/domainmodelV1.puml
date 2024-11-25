@@ -1,0 +1,49 @@
+@startuml
+title Fog Carports - Domænemodel
+
+class Kunde {
+    navn
+    email
+    telefonnummer
+}
+
+class Sælger {
+    navn
+    email
+}
+
+class Carport {
+    bredde
+    længde
+    højde
+    tagmateriale
+    taghældning
+    skur (ja/nej)
+}
+
+class Skur {
+    bredde
+    dybde
+    beklædning
+    gulvtype
+}
+
+class Tilbud {
+    pris
+    status ("Afventer", "Accepteret", "Afvist")
+    oprettelsesdato
+}
+
+class Faktura {
+    totalpris
+    tegning (SVG)
+    genereringsdato
+}
+
+Kunde "1" -- "*" Tilbud : forespørger
+Tilbud "1" -- "1" Carport : indeholder
+Carport "1" -- "0..1" Skur : kan inkludere
+Tilbud "1" -- "1" Faktura : resulterer i
+Sælger "1" -- "*" Tilbud : håndterer
+
+@enduml
