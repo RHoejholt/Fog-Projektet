@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.entities.User;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
 import app.persistence.UserMapper;
@@ -11,6 +12,8 @@ public class UserController {
         //We are just adding routing required from Javalin to make the program work.
         app.get("/createuser", ctx -> ctx.render("createuser.html"));
         app.post("/createuser", ctx -> createUser(ctx, dbConnection));
+        app.get("/login", ctx -> ctx.render("login.html"));
+        app.post("/login", ctx -> doLogin(ctx, dbConnection));
     }
 
     private static void createUser(Context ctx, ConnectionPool dbConnection) {
@@ -58,5 +61,20 @@ public class UserController {
         } else {
             return true;
         }
+    }
+    public static void doLogin(Context ctx, ConnectionPool dbConnection) {
+        String name = ctx.formParam("username");
+        String password = ctx.formParam("password");
+        if (name != null) {
+            name = name.toLowerCase(); //Avoiding potential nullPointerExceptions
+        }
+        try {
+            User user = UserMapper.login(name, password, dbConnection);
+            ctx.sessionAttribute("currentUser", user);
+        } catch (DatabaseException e) {
+            ctx.attribute("message", e.getMessage());
+        }
+        ctx.render ("login.html");
+
     }
 }
