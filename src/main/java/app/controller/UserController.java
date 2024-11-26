@@ -14,6 +14,7 @@ public class UserController {
         app.post("/createuser", ctx -> createUser(ctx, dbConnection));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/login", ctx -> doLogin(ctx, dbConnection));
+        app.get("/logout", ctx -> doLogout(ctx, dbConnection));
     }
 
     private static void createUser(Context ctx, ConnectionPool dbConnection) {
@@ -76,5 +77,10 @@ public class UserController {
         }
         ctx.render ("login.html");
 
+    }
+    public static void doLogout(Context ctx, ConnectionPool dbConnection) { //Maybe a bit weird never using dbConnection but oh well
+        //Invalidate session
+        ctx.req().getSession().invalidate();
+        ctx.redirect("/");
     }
 }
