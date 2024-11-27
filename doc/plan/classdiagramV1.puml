@@ -61,6 +61,20 @@ class Orders {
     + Timestamp getOrderDate()
     + BigDecimal getTotalPrice()
 }
+
+class User {
+    -int userId
+    -String username
+    -String role
+    + int getUserId()
+    + String getUsername()
+    + String getRole()
+    + boolean isAdmin()
+    + String toString()
+
+}
+
+
 }
 
 package Persistence{
@@ -89,7 +103,14 @@ class OrderlineMapper {
 class OrdersMapper {
     + static List<Orders> getAllOrders(ConnectionPool) throws DatabaseException
     + static void createNewOrder(Timestamp, List<Orderline>, BigDecimal, ConnectionPool) throws DatabaseException
+
 }
+
+class UserMapper {
+    + static void createUser(String username, String password, ConnectionPool pool) throws DatabaseException
+    + static User login(String username, String password, ConnectionPool connectionPool) throws DatabaseException
+}
+
 }
 
 package controllers{
@@ -109,6 +130,16 @@ class ShedController {
     + static void createShed(Context, ConnectionPool)
     + static void addRoutes(Javalin, ConnectionPool)
 }
+
+class UserController {
+    - static boolean passwordCheck(Context ctx, String password, String confirmPassword)
+    + static void createUser(Context ctx, ConnectionPool dbConnection)
+    + static void doLogin(Context ctx, ConnectionPool dbConnection)
+    + static void doLogout(Context ctx, ConnectionPool dbConnection)
+}
+
+
+
 }
 
 class Main {
