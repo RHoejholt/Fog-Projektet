@@ -43,7 +43,7 @@ VALUES
     (570, 11),
     (600, 12);
 
-INSERT INTO public."dimensioner_længde" ("længde", id)
+INSERT INTO public."dimensioner_længde" (længde, id)
 VALUES
     (270, 1),
     (300, 2),
