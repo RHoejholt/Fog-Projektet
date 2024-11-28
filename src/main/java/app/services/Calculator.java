@@ -14,6 +14,7 @@ public class Calculator {
     private static int overhang = 130; //total længde af ræm der hænger ud fra stolper
     private static int maxDist = 350; //maks længde mellem 2 stopler
 
+
     private static final int PILLARID = 1;
     private static final int RAFTERID  = 2;
     private static final int BEAMSID  = 3;
@@ -22,6 +23,8 @@ public class Calculator {
     private static int width = 500;
     private static int length = 720;
     private ConnectionPool connectionPool;
+    private static int maxPlankLength = 600;
+    private static int raftersSeperationDistance = 55;
 
     public Calculator(int width, int length) {
         this.width = width;
@@ -48,7 +51,7 @@ public class Calculator {
     //Spær
     public void calcRafters(Order order)
     {
-        int quantity = (length-5) / 55;
+        int quantity = (length-5) / raftersSeperationDistance;
     }
 
 
@@ -57,13 +60,13 @@ public class Calculator {
     public void calcBeams(Order order)
     {
         int quantity;
-        if(length<=600) {
+        if(length<=maxPlankLength) {
             quantity = 2;
         } else {
-            quantity = 2 + (length-600) / 600;
+            quantity = 2 + (length-maxPlankLength) / maxPlankLength;
         }
         int extraPillars;
-        if (quantity>2 && length != 700 && length != 630){
+        if (quantity>2 && length != maxPlankLength + 100 && length != maxPlankLength + 30){
             extraPillars = 2;
         }
 
