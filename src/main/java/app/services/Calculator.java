@@ -48,8 +48,8 @@ public class Calculator {
     {
         int quantity = 2 * (2 + (order.getLength()-maxDist-overhang) / maxDist);
         quantity =+ extraPillars;
-        //ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
-        //OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Stopler nedgraves 90cm i jord");
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
+        OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Stopler nedgraves 90cm i jord");
         //orderItems.add(orderItem);
     }
 
