@@ -3,31 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Dimensions</title>
+    <title>Select Carport Dimensions</title>
 </head>
 <body>
 <h1>Select Carport Dimensions</h1>
-<form action="/submit-dimensions" method="POST">
+
+<!-- Form to submit selected dimensions -->
+<!-- Change /dimensions to where the submit button needs to lead to. This is only temporary -->
+<form action="/dimensions" method="POST">
+    <!-- Dropdown for Bredde -->
     <label for="bredde">Bredde:</label>
     <select name="bredde" id="bredde">
-        <!-- Loop through breddeOptions to create dynamic <option> tags -->
         <th:block th:each="bredde : ${breddeOptions}">
             <option th:value="${bredde}" th:text="${bredde}"></option>
         </th:block>
     </select>
-    <br>
+    <br><br>
+
+    <!-- Dropdown for Længde -->
     <label for="længde">Længde:</label>
     <select name="længde" id="længde">
-        <!-- Loop through længdeOptions to create dynamic <option> tags -->
         <th:block th:each="længde : ${længdeOptions}">
             <option th:value="${længde}" th:text="${længde}"></option>
         </th:block>
     </select>
-    <br>
+    <br><br>
+
+    <!-- Dropdown for Tag Materiale -->
+    <label for="tagMateriale">Tag Materiale:</label>
+    <select name="tagMateriale" id="tagMateriale">
+        <th:block th:each="materiale : ${tagMaterialeOptions}">
+            <option th:value="${materiale}" th:text="${materiale}"></option>
+        </th:block>
+    </select>
+    <br><br>
+
+    <!-- Submit button -->
     <button type="submit">Submit</button>
 </form>
 
-<!-- Display error message if any -->
+<!-- Display error or success message -->
 <p th:text="${message}"></p>
 </body>
 </html>

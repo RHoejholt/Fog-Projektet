@@ -28,6 +28,13 @@ ALTER TABLE IF EXISTS public.orders
     ON DELETE NO ACTION
     NOT VALID;
 
+CREATE TABLE IF NOT EXISTS public.tag_materiale (
+    id serial NOT NULL,
+    materiale character varying(64) NOT NULL,
+    tag_type character varying(64) NOT NULL,
+    PRIMARY KEY (id)
+);
+
 INSERT INTO public.dimensioner_bredde (bredde, id)
 VALUES
     (270, 1),
@@ -63,5 +70,15 @@ VALUES
     (720, 16),
     (750, 17),
     (780, 18);
+
+INSERT INTO public.tag_materiale (materiale, tag_type)
+VALUES
+    ('Sunlux 1300K', 'Fladt'),
+    ('Sunlux 1200N', 'Fladt'),
+    ('Benders sort', 'Skrå'),
+    ('Benders brun', 'Skrå'),
+    ('Benders tegldrød', 'Skrå'),
+    ('Benders rød', 'Skrå'),
+    ('Eternit grå B6', 'Skrå');
 
 END;
