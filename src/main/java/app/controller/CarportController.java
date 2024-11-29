@@ -10,10 +10,26 @@ import java.util.List;
 
 public class CarportController {
     public static void addRoutes(Javalin app, ConnectionPool dbConnection) {
-        app.get("/dimensions", ctx -> showDimensionsForm(ctx, dbConnection));  // Show the form with dynamic options
+        app.get("/dimensions", ctx -> showAllForms(ctx, dbConnection));  // Show the form with dynamic options
         app.post("/submit-dimensions", ctx -> submitDimensions(ctx, dbConnection));  // Handle the form submission (Used to send data to another page)
     }
+    private static void showAllForms(Context ctx, ConnectionPool dbConnection) {
+        showDimensionsForm(ctx, dbConnection);
+        showTagMaterialeForm(ctx, dbConnection);
+        // Render the form with dynamic options
+        ctx.render("dimensions.html");
+    }
+    private static void showTagMaterialeForm(Context ctx, ConnectionPool dbConnection) {
+        try {
+            // Query the database to get the available 'bredde' and 'længde' options using getDimensionOptions
+            List<String> materialeOptions = getDimensionOptions("materiale", "tag_materiale", dbConnection);
 
+            // Add the options to the context so Thymeleaf can access them
+            ctx.attribute("tag_materiale", materialeOptions);
+        } catch (DatabaseException e) {
+            ctx.attribute("message", "Error fetching materiale: " + e.getMessage());
+        }
+    }
     // Method to show the dimensions form
     private static void showDimensionsForm(Context ctx, ConnectionPool dbConnection) {
         try {
@@ -27,9 +43,6 @@ public class CarportController {
         } catch (DatabaseException e) {
             ctx.attribute("message", "Error fetching dimensions: " + e.getMessage());
         }
-
-        // Render the form with dynamic options
-        ctx.render("dimensions.html");
     }
 
     // Method to call getDimensionOptions to get the available options for a column and table

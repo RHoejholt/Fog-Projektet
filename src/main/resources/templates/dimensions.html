@@ -23,6 +23,13 @@
             <option th:value="${længde}" th:text="${længde}"></option>
         </th:block>
     </select>
+    <label for="tagMateriale">Tag materiale</label>
+    <select name="tagMateriale" id="tagMateriale">
+        <option th:each="materiale : ${tag_materiale}"
+                th:value="${materiale}"
+                th:text="${materiale}">
+        </option>
+    </select>
     <br>
     <button type="submit">Submit</button>
 </form>

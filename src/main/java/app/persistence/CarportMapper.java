@@ -14,8 +14,8 @@ public class CarportMapper {
         // Define valid table and column names
         // This is a pretty limiting way of doing it. It's just a whitelist.
         // We should probably make a new method in the future that gives the admins an option to add/remove/create tables
-        List<String> validTables = List.of("dimensioner_bredde", "dimensioner_længde");
-        List<String> validColumns = List.of("bredde", "længde");
+        List<String> validTables = List.of("dimensioner_bredde", "dimensioner_længde","tag_materiale");
+        List<String> validColumns = List.of("bredde", "længde","materiale","tag_type");
 
         // Check if the inputs are valid
         if (!validTables.contains(table) || !validColumns.contains(column)) {

@@ -28,4 +28,40 @@ ALTER TABLE IF EXISTS public.orders
     ON DELETE NO ACTION
     NOT VALID;
 
+INSERT INTO public.dimensioner_bredde (bredde, id)
+VALUES
+    (270, 1),
+    (300, 2),
+    (330, 3),
+    (360, 4),
+    (390, 5),
+    (420, 6),
+    (450, 7),
+    (480, 8),
+    (510, 9),
+    (540, 10),
+    (570, 11),
+    (600, 12);
+
+INSERT INTO public.dimensioner_længde (længde, id)
+VALUES
+    (270, 1),
+    (300, 2),
+    (330, 3),
+    (360, 4),
+    (390, 5),
+    (420, 6),
+    (450, 7),
+    (480, 8),
+    (510, 9),
+    (540, 10),
+    (570, 11),
+    (600, 12),
+    (630, 13),
+    (660, 14),
+    (690, 15),
+    (720, 16),
+    (750, 17),
+    (780, 18);
+
 END;
