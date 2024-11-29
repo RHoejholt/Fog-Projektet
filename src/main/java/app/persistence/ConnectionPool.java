@@ -60,7 +60,7 @@ public class ConnectionPool
      * @return a database connection to be used in sql requests
      * @throws SQLException
      */
-    public synchronized Connection getConnection() throws SQLException
+    public static synchronized Connection getConnection() throws SQLException
     {
         return ds.getConnection();
     }
