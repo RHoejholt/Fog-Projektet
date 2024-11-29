@@ -2,7 +2,29 @@
 
 Title Fog Carports
 
-scale 0.5
+scale 1
+package services {
+    class Calculator {
+        - static int overhang
+        - static int maxDist
+        - static int extraPillars
+        - static final int PILLARID
+        - static final int RAFTERID
+        - static final int BEAMSID
+        - static List<OrderItem> orderItems
+        - static int width
+        - static int length
+        - ConnectionPool connectionPool
+        - static int maxPlankLength
+        - static int raftersSeperationDistance
+
+        + Calculator(int width, int length)
+        + void calcCarport(Order order) throws DatabaseException
+        + static void calcPillar(Order order)
+        + void calcRafters(Order order)
+        + void calcBeams(Order order)
+    }
+
 package entities{
 class Carport {
     - int carportId
@@ -23,11 +45,11 @@ class Carport {
 }
 
 class Shed {
-    - int shedId
-    - double width
-    - double depth
-    - String cladding
-    - String floorType
+    private int orderItemId;
+    private Order order;
+    private ProductVariant productVariant;
+    private int quantity;
+    private String description;
     + Shed(int, double, double, String, String)
     + int getShedId()
     + double getWidth()
@@ -36,23 +58,21 @@ class Shed {
     + String getFloorType()
 }
 
-class Orderline {
-    - int orderlineId
-    - int orderId
-    - int carportId
-    - int shedId
-    - int quantity
-    - BigDecimal price
-    + Orderline(int, int, int, int, int, BigDecimal)
-    + int getOrderlineId()
-    + int getOrderId()
-    + int getCarportId()
-    + int getShedId()
+class OrderItem {
+    -int orderItemId;
+    -Order order;
+    -ProductVariant productVariant;
+    -int quantity;
+    -String description;
+    + int getOrderItemId()
+    +Order getOrder()
+    + ProductVariant getProductVariant()
     + int getQuantity()
-    + BigDecimal getPrice()
+    + String getDescription()
+
 }
 
-class Orders {
+class Order {
     - int orderId
     - Timestamp orderDate
     - BigDecimal totalPrice
@@ -132,8 +152,9 @@ class ShedController {
 }
 
 class UserController {
-    - static boolean passwordCheck(Context ctx, String password, String confirmPassword)
-    + static void createUser(Context ctx, ConnectionPool dbConnection)
+    + static void addRoutes(Javalin app, ConnectionPool dbConnection)
+    - static void createUser(Context ctx, ConnectionPool dbConnection)
+    -  static boolean passwordCheck(Context ctx, String password, String confirmPassword)
     + static void doLogin(Context ctx, ConnectionPool dbConnection)
     + static void doLogout(Context ctx, ConnectionPool dbConnection)
 }
@@ -158,9 +179,9 @@ class DatabaseException {
 }
 }
 
-Orders "1" *-- "*" Orderline : contains
-Orderline "*" *-- "1" Carport : links to
-Orderline "*" *-- "1" Shed : links to
+Order "1" *-- "*" OrderItem : contains
+OrderItem "*" *-- "1" Carport : links to
+OrderItem "*" *-- "1" Shed : links to
 Carport "1" *-- "1" Shed : may include
 ConnectionPool -- CarportMapper : provides connections
 ConnectionPool -- ShedMapper : provides connections
@@ -168,8 +189,8 @@ ConnectionPool -- OrderlineMapper : provides connections
 ConnectionPool -- OrdersMapper : provides connections
 CarportMapper -- Carport : maps
 ShedMapper -- Shed : maps
-OrderlineMapper -- Orderline : maps
-OrdersMapper -- Orders : maps
+OrderlineMapper -- OrderItem : maps
+OrdersMapper -- Order : maps
 OrderController -- OrdersMapper : interacts with
 CarportController -- CarportMapper : interacts with
 ShedController -- ShedMapper : interacts with
