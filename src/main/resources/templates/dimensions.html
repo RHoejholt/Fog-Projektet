@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Dimensions</title>
+</head>
+<body>
+<h1>Select Carport Dimensions</h1>
+<form action="/submit-dimensions" method="POST">
+    <label for="bredde">Bredde:</label>
+    <select name="bredde" id="bredde">
+        <!-- Loop through breddeOptions to create dynamic <option> tags -->
+        <th:block th:each="bredde : ${breddeOptions}">
+            <option th:value="${bredde}" th:text="${bredde}"></option>
+        </th:block>
+    </select>
+    <br>
+    <label for="længde">Længde:</label>
+    <select name="længde" id="længde">
+        <!-- Loop through længdeOptions to create dynamic <option> tags -->
+        <th:block th:each="længde : ${længdeOptions}">
+            <option th:value="${længde}" th:text="${længde}"></option>
+        </th:block>
+    </select>
+    <br>
+    <button type="submit">Submit</button>
+</form>
+
+<!-- Display error message if any -->
+<p th:text="${message}"></p>
+</body>
+</html>
