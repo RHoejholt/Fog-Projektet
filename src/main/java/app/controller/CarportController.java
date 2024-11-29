@@ -11,7 +11,7 @@ import java.util.List;
 public class CarportController {
     public static void addRoutes(Javalin app, ConnectionPool dbConnection) {
         app.get("/dimensions", ctx -> showDimensionsForm(ctx, dbConnection));  // Show the form with dynamic options
-        app.post("/submit-dimensions", ctx -> submitDimensions(ctx, dbConnection));  // Handle the form submission
+        app.post("/submit-dimensions", ctx -> submitDimensions(ctx, dbConnection));  // Handle the form submission (Used to send data to another page)
     }
 
     // Method to show the dimensions form
@@ -39,6 +39,7 @@ public class CarportController {
     }
 
     // Handle the form submission
+    // Might be irrelevant code
     private static void submitDimensions(Context ctx, ConnectionPool dbConnection) {
         // Receive the form parameters (bredde and længde)
         String bredde = ctx.formParam("bredde");
@@ -50,9 +51,10 @@ public class CarportController {
             ctx.render("dimensions.html");
         } else {
             // Process the dimensions (e.g., save to session or database)
+            // Can be changed away from session and made to send to database instead, to store orders.
             ctx.sessionAttribute("bredde", bredde);
             ctx.sessionAttribute("længde", længde);
-            ctx.redirect("/nextpage");  // Redirect to another page for further action
+            // ctx.redirect("/nextpage");  // Redirect to another page for further action
         }
     }
 }
