@@ -14,7 +14,7 @@ public class UserController {
         app.post("/createuser", ctx -> createUser(ctx, dbConnection));
         app.get("/login", ctx -> ctx.render("login.html"));
         app.post("/login", ctx -> doLogin(ctx, dbConnection));
-        app.get("/logout", ctx -> doLogout(ctx, dbConnection));
+        app.get("/logout", ctx -> doLogout(ctx));
     }
 
     private static void createUser(Context ctx, ConnectionPool dbConnection) {
@@ -37,7 +37,7 @@ public class UserController {
                 // Actually creating a user when all checks passed.
                 username = username.toLowerCase();
                 UserMapper.createUser(username, password, dbConnection);
-                ctx.attribute("message", "du er nu oprettet");
+                ctx.attribute("message", "Du er nu oprettet");
             } catch (DatabaseException e) {
                 // Catching errors when a username is already in use
                 // Because we do not want duplicate usernames in our database.
@@ -49,6 +49,7 @@ public class UserController {
                 }
                 ctx.render("createuser.html");
             }
+            ctx.render("index.html");
         } else {
             ctx.render("createuser.html");
         }
@@ -75,10 +76,10 @@ public class UserController {
         } catch (DatabaseException e) {
             ctx.attribute("message", e.getMessage());
         }
-        ctx.render ("login.html");
+        ctx.render ("index.html");
 
     }
-    public static void doLogout(Context ctx, ConnectionPool dbConnection) { //Maybe a bit weird never using dbConnection but oh well
+    public static void doLogout(Context ctx) { //Maybe a bit weird never using dbConnection but oh well
         //Invalidate session
         ctx.req().getSession().invalidate();
         ctx.redirect("/");
