@@ -17,6 +17,7 @@ public class CarportController {
     private static void showAllForms(Context ctx, ConnectionPool dbConnection) {
         showDimensionsForm(ctx, dbConnection);
         showTagMaterialeForm(ctx, dbConnection);
+        showSpærOgRemForm(ctx,dbConnection);
         // Render the form with dynamic options
         ctx.render("dimensions.html");
     }
@@ -75,6 +76,18 @@ public class CarportController {
         ctx.sessionAttribute("bredde", bredde);
         ctx.sessionAttribute("længde", længde);
         // ctx.redirect("/nextpage");  // Redirect to another page for further action
+    }
+
+    private static void showSpærOgRemForm(Context ctx, ConnectionPool dbConnection) {
+        try {
+            // Query the database to get the available column and table
+            List<String> spærOgRemOptions = getDimensionOptions("materiale", "spær_og_rem", dbConnection);
+
+            // Add the options to the context so Thymeleaf can access them
+            ctx.attribute("spærOgRemOptions", spærOgRemOptions);
+        } catch (DatabaseException e) {
+            ctx.attribute("message", "Error fetching Spær og Rem materials: " + e.getMessage());
+        }
     }
 }
 

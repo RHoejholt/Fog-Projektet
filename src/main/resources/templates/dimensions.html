@@ -38,6 +38,15 @@
     </select>
     <br><br>
 
+    <label for="spær_og_rem">Spær og Rem:</label>
+    <select name="spær_og_rem" id="spær_og_rem" required>
+        <option value="" disabled selected>Vælg materiale</option>
+        <th:block th:each="materiale : ${spærOgRemOptions}">
+            <option th:value="${materiale}" th:text="${materiale}"></option>
+        </th:block>
+    </select>
+    <br><br>
+
     <!-- Submit button -->
     <button type="submit">Submit</button>
 </form>
