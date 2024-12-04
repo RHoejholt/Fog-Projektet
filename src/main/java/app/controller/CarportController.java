@@ -17,10 +17,21 @@ public class CarportController {
     private static void showAllForms(Context ctx, ConnectionPool dbConnection) {
         showDimensionsForm(ctx, dbConnection);
         showTagMaterialeForm(ctx, dbConnection);
+        showSkurForm(ctx, dbConnection);
         // Render the form with dynamic options
         ctx.render("dimensions.html");
     }
+    private static void showSkurForm(Context ctx, ConnectionPool dbConnection) {
+        try {
+            // Query the database to get the available column and table
+            List<String> skurOptions = getDimensionOptions("skur", "skur", dbConnection);
 
+            // Add the options to the context so Thymeleaf can access them
+            ctx.attribute("skurOptions", skurOptions);
+        } catch (DatabaseException e) {
+            ctx.attribute("message", "Error fetching skur: " + e.getMessage());
+        }
+    }
     private static void showTagMaterialeForm(Context ctx, ConnectionPool dbConnection) {
         try {
             // Query the database to get the available column and table
@@ -61,6 +72,7 @@ public class CarportController {
         String bredde = ctx.formParam("bredde");
         String længde = ctx.formParam("længde");
         String tagMateriale = ctx.formParam("tagMateriale");
+        String skur = ctx.formParam("skur");
 
         // Add simple validation for dimensions
         if (bredde == null || længde == null) {
@@ -69,11 +81,15 @@ public class CarportController {
         } else if (tagMateriale == null) {
             ctx.attribute("message", "Venligst vælg tag materiale.");
             showAllForms(ctx, dbConnection);
+        } else if (skur == null) {
+            ctx.attribute("message", "Venligst vælg skur eller ej.");
+            showAllForms(ctx, dbConnection);
         }
         // Process the dimensions (e.g., save to session or database)
         // Can be changed away from session and made to send to database instead, to store orders.
         ctx.sessionAttribute("bredde", bredde);
         ctx.sessionAttribute("længde", længde);
+        ctx.sessionAttribute("skur",skur);
         // ctx.redirect("/nextpage");  // Redirect to another page for further action
     }
 }

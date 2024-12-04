@@ -81,4 +81,9 @@ VALUES
     ('Benders rød', 'Skrå'),
     ('Eternit grå B6', 'Skrå');
 
+INSERT INTO public.skur (id,skur)
+VALUES
+    (1,Ja),
+    (2,Nej);
+
 END;
