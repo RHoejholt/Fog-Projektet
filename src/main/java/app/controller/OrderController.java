@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.entities.Order;
 import app.entities.OrderItem;
 import app.services.Calculator;
 
@@ -13,17 +14,15 @@ public class OrderController {
 
         ArrayList<OrderItem> itemList = new ArrayList<OrderItem>();
 
-
         // calculate pillar
         // takes length of carport
-        itemList.add.(Calculator.calcPillar(order.getLength()));
+        itemList.add(Calculator.calcPillarAndBeams(order.getLength()));
 
         // calculate raft
-        itemList.add.(Calculator.calcRafters(order.getLength(), order.getWidth()));
+        itemList.add(Calculator.calcRafters(order.getLength(), order.getWidth()));
 
 
-        // calculate beams
-        itemList.add.(Calculator.calcBeams(order.getLength(), order.getWidth()));
+
 
 
         return itemList;

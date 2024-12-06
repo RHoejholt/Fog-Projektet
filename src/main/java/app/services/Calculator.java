@@ -3,6 +3,7 @@ package app.services;
 
 import app.entities.Order;
 import app.entities.OrderItem;
+import app.entities.ProductVariant;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
 
@@ -24,62 +25,67 @@ public class Calculator {
 
     // Ønsket længde og bredde for din carport
     private static int width = 500;
-    private static int length = 720;
+    private static int carportLength = 720;
 
-    private ConnectionPool connectionPool;
+    private static ConnectionPool connectionPool;
 
     private static int maxPlankLength = 600;
     private static int raftersSeperationDistance = 55;
 
-    public Calculator(int width, int length) {
+    public Calculator(int width, int carportLength) {
         this.width = width;
-        this.length = length;
+        this.carportLength = carportLength;
     }
 
     public void calcCarport(Order order) throws DatabaseException
     {
         calcBeams(order);
         calcRafters(order);
-        calcPillar(order);
     }
 
     //Stolper. Det engelske ord "Pillar" foretrækkes, da "post" og "pole" har flere betydninger.
-    public static void calcPillar(Order order)
+    public static OrderItem calcPillarAndBeams(int length)
     {
-        int quantity = 2 * (2 + (order.getLength()-maxDist-overhang) / maxDist);
-        quantity =+ extraPillars;
+        int quantity = 2 * (2 + (carportLength-maxDist-overhang) / maxDist);
+
+
+        extraPillars = 0;
+        calcBeams(carportLength);
+        quantity += extraPillars;
         ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
         OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Stopler nedgraves 90cm i jord");
         //orderItems.add(orderItem);
+
+        return orderItem;
     }
 
     //Spær
-    public void calcRafters(Order order)
+    public OrderItem calcRafters(Order order)
     {
-        int quantity = (order.getLength()-5) / raftersSeperationDistance;
+        int quantityOfRafters = (order.getLength()-5) / raftersSeperationDistance;
+        OrderItem orderItem = new OrderItem(order, )
+        return
     }
 
 
 
     //Remme
-    public void calcBeams(Order order)
-    {
-        int quantity;
-        if(order.getLength()<=maxPlankLength) {
-            quantity = 2;
-        } else {
-            quantity = 2 + (order.getLength()-maxPlankLength) / maxPlankLength;
-        }
+    public static int calcBeams(int carportLength) {
+        int quantityOfBeams = 2;
 
-        if (quantity>2 && order.getLength() != maxPlankLength + 100 && length != maxPlankLength + 30){
-            extraPillars = 2;
-        }else{
-            extraPillars = 0;
+        if (carportLength >= maxPlankLength) {
+            quantityOfBeams = 2 + (carportLength - maxPlankLength) / maxPlankLength;
+            calcExtraPillars(carportLength);
         }
-
+        return quantityOfBeams;
     }
 
-
+    public int calcExtraPillars (int carportLength) {
+        if (carportLength <= maxPlankLength + 100) {
+            extraPillars = 2;
+        }
+        return extraPillars;
+    }
 
 
 
