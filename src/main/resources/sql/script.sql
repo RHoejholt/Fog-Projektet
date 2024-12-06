@@ -81,6 +81,11 @@ VALUES
     ('Benders rød', 'Skrå'),
     ('Eternit grå B6', 'Skrå');
 
+INSERT INTO public.skur (id,skur)
+VALUES
+    (1,Ja),
+    (2,Nej);
+
 INSERT INTO public.spær_og_rem (id,materiale)
 VALUES
     (1,'Benders sort'),
