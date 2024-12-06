@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Create User</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
-<div>
+<!-- Include the navbar fragment -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+<div class="container">
     <!-- opret bruger formular-->
     <form method="post" action="/createuser" novalidate>
-        <label for="username">E-mail: </label>
+        <label for="username">E-mail: </label><br>
         <input type="email" id="username" name="username"><br><br>
-        <label for="password">Kodeord: </label>
+        <label for="password">Kodeord: </label><br>
         <input type="password"  id="password" name="password"><br><br>
-        <label for="confirmpassword">Bekræft kodeord: </label>
+        <label for="confirmpassword">Bekræft kodeord: </label><br>
         <input type="password" id="confirmpassword" name="confirmpassword"><br><br>
         <button type="submit" value="submit">Opret bruger</button>
     </form>

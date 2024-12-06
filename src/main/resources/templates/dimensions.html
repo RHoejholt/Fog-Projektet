@@ -8,6 +8,10 @@
 <body>
 <h1>Select Carport Dimensions</h1>
 
+<!-- Include the navbar fragment -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+
 <!-- Form to submit selected dimensions -->
 <!-- Change /dimensions to where the submit button needs to lead to. This is only temporary -->
 <form action="/dimensions" method="POST">

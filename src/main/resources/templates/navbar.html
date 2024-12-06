@@ -1,0 +1,46 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="navbar" class="navbar">
+    <!-- Navbar fragment -->
+    <div class="navbar-content">
+        <!-- Left Section: Navbar Logo and Login-related links -->
+        <div class="navbar-left">
+            <a href="/" class="navbar-logo-link">
+                <img src="/images/fog_logo.png" alt="Fog Logo" class="navbar-logo">
+            </a>
+
+            <ul class="navbar-nav">
+                <!-- If user is logged in, show the greeting -->
+                <li class="nav-item" th:if="${session.currentUser != null}">
+                    <span class="nav-link" th:text="'Hello, ' + ${session.currentUser.username}">Hello, </span>
+                </li>
+
+                <!-- If user is not logged in, show the "Opret bruger" link -->
+                <li class="nav-item" th:if="${session.currentUser == null}">
+                    <a href="/createuser" th:href="@{/createuser}" class="nav-link">Opret bruger</a>
+                </li>
+
+                <!-- If user is not logged in, show the "Login" link -->
+                <li class="nav-item" th:if="${session.currentUser == null}">
+                    <a href="/login" th:href="@{/login}" class="nav-link">Login</a>
+                </li>
+
+                <!-- If user is logged in, show the "Logout" link -->
+                <li class="nav-item" th:if="${session.currentUser != null}">
+                    <a href="/logout" th:href="@{/logout}" class="nav-link">Logout</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Right Section: Admin-only buttons -->
+        <div class="navbar-right">
+            <ul class="navbar-nav">
+                <!-- Admin-only buttons -->
+                <li class="nav-item" th:if="${session.currentUser != null and session.currentUser.role == 'admin'}">
+                    <a class="nav-link">Admin Placeholder 1</a>
+                </li>
+                <li class="nav-item" th:if="${session.currentUser != null and session.currentUser.role == 'admin'}">
+                    <a class="nav-link">Admin Placeholder 2</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
