@@ -86,4 +86,12 @@ VALUES
     (1,Ja),
     (2,Nej);
 
+INSERT INTO public.spær_og_rem (id,materiale)
+VALUES
+    (1,'Benders sort'),
+    (2,'Benders brun'),
+    (3,'Benders tegldrød'),
+    (4,'Benders rød'),
+    (5,'Eternit grå B6');
+
 END;

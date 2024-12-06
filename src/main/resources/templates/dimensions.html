@@ -8,6 +8,10 @@
 <body>
 <h1>Select Carport Dimensions</h1>
 
+<!-- Include the navbar fragment -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+
 <!-- Form to submit selected dimensions -->
 <!-- Change /dimensions to where the submit button needs to lead to. This is only temporary -->
 <form action="/dimensions" method="POST">
@@ -47,6 +51,14 @@
         <option value="" disabled selected>Vælg et skur</option>
         <th:block th:each="skur : ${skurOptions}">
             <option th:value="${skur}" th:text="${skur}"></option>
+          </th:block>
+    </select>
+    <br><br>
+    <label for="spær_og_rem">Spær og Rem:</label>
+    <select name="spær_og_rem" id="spær_og_rem" required>
+        <option value="" disabled selected>Vælg materiale</option>
+        <th:block th:each="materiale : ${spærOgRemOptions}">
+            <option th:value="${materiale}" th:text="${materiale}"></option>
         </th:block>
     </select>
     <br><br>
