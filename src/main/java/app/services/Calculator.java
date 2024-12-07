@@ -1,94 +1,61 @@
 package app.services;
 
-
 import app.entities.Order;
 import app.entities.OrderItem;
 import app.entities.ProductVariant;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
+import app.persistence.ProductMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Calculator {
 
-    private static int overhang = 130; //total længde af ræm der hænger ud fra stolper
-    private static int maxDist = 350; //maks længde mellem 2 stopler
-
-    private static int extraPillars;
-    private static final int PILLARID = 1;
-    private static final int RAFTERID  = 2;
-    private static final int BEAMSID  = 3;
-
-    private static List<OrderItem> orderItems = new ArrayList<>();
-
-
-    // Ønsket længde og bredde for din carport
-    private static int width = 500;
-    private static int carportLength = 720;
+    private static final int OVERHANG = 130;
+    private static final int MAX_DIST = 350;
+    private static final int PILLARID = 1;  //Vi bruger "pillar" da "post" har flere betydninger
+    private static final int RAFTERID = 2;
+    private static final int MAX_PLANK_LENGTH = 600;
+    private static final int RAFTER_SEPARATION_DISTANCE = 55;
 
     private static ConnectionPool connectionPool;
 
-    private static int maxPlankLength = 600;
-    private static int raftersSeperationDistance = 55;
+    private Order order;
+    private List<OrderItem> orderItems = new ArrayList<>();
+    private int extraPillars;
 
-    public Calculator(int width, int carportLength) {
-        this.width = width;
-        this.carportLength = carportLength;
+    public Calculator(Order order) {
+        this.order = order;
     }
 
-    public void calcCarport(Order order) throws DatabaseException
-    {
-        calcBeams(order);
-        calcRafters(order);
-    }
-
-    //Stolper. Det engelske ord "Pillar" foretrækkes, da "post" og "pole" har flere betydninger.
-    public static OrderItem calcPillarAndBeams(int length)
-    {
-        int quantity = 2 * (2 + (carportLength-maxDist-overhang) / maxDist);
-
+    // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
+    public OrderItem calcPillarAndBeams() throws DatabaseException {
+        int carportLength = order.getLength();
+        int quantity = 2 * (2 + (carportLength - MAX_DIST - OVERHANG) / MAX_DIST);
 
         extraPillars = 0;
-        calcBeams(carportLength);
+        calcBeams(); // Adds extra pillars if needed
         quantity += extraPillars;
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
-        OrderItem orderItem = new OrderItem(0, order, productVariant, quantity, "Stopler nedgraves 90cm i jord");
-        //orderItems.add(orderItem);
 
-        return orderItem;
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
+        return new OrderItem(order, productVariant, quantity, "Stolper nedgraves 90cm i jord");
     }
 
     //Spær
-    public OrderItem calcRafters(Order order)
-    {
-        int quantityOfRafters = (order.getLength()-5) / raftersSeperationDistance;
-        OrderItem orderItem = new OrderItem(order, )
-        return
+    public OrderItem calcRafters() throws DatabaseException {
+        int carportWidth = order.getWidth();
+        int quantityOfRafters = (carportWidth - 5) / RAFTER_SEPARATION_DISTANCE;
+
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, RAFTERID, connectionPool);
+        return new OrderItem(order, productVariant, quantityOfRafters, "Spær til tag");
     }
 
-
-
-    //Remme
-    public static int calcBeams(int carportLength) {
-        int quantityOfBeams = 2;
-
-        if (carportLength >= maxPlankLength) {
-            quantityOfBeams = 2 + (carportLength - maxPlankLength) / maxPlankLength;
-            calcExtraPillars(carportLength);
+    //Denne metode er seperat for at kunne unit testes
+    private void calcBeams() {
+        int carportLength = order.getLength();
+        if (carportLength >= MAX_PLANK_LENGTH) {
+            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
         }
-        return quantityOfBeams;
     }
-
-    public int calcExtraPillars (int carportLength) {
-        if (carportLength <= maxPlankLength + 100) {
-            extraPillars = 2;
-        }
-        return extraPillars;
-    }
-
-
-
-
-
 }
