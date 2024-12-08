@@ -8,12 +8,12 @@ public class Order {
     private int length;
     private int width;
     private int status;
-    private int id;
+    private int orderId;
     private ArrayList<OrderItem> orderItems = new ArrayList<>();
 
     public Order(int width, int id, int length, int status) {
         this.width = width;
-        this.id = id;
+        this.orderId = id;
         this.length = length;
         this.status = status;
     }
@@ -34,5 +34,13 @@ public class Order {
 
     public int getSize() {
         return orderItems.size();
+    }
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public ArrayList<OrderItem> getOrderItems() {
+        return orderItems;
     }
 }
