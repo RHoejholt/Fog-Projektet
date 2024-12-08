@@ -32,6 +32,7 @@ class CalculatorTest {
         try {
             Calculator calculator = new Calculator(testOrder);
             calculator.calcPillarAndBeams();
+            System.out.println(testOrder.getOrderItems());
             System.out.println("size " + testOrder.getSize());
             assertEquals(2, testOrder.getSize());
         }catch(Exception e){
