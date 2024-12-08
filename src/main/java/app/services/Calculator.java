@@ -2,6 +2,7 @@ package app.services;
 
 import app.entities.Order;
 import app.entities.OrderItem;
+import app.entities.Product;
 import app.entities.ProductVariant;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
@@ -38,13 +39,12 @@ public class Calculator {
 
         quantity += calcExtraPillars(); // Adds extra pillars if needed
 
-        ProductVariant productVariant1 = new ProductVariant();
-        ProductVariant productVariant2 = new ProductVariant();
+        ProductVariant productVariantPillar = new ProductVariant(1, new Product(1, "Pillar", "kage", 10), 6000);
+        ProductVariant productVariantBeam = new ProductVariant(2, new Product(2, "Beam", "kage", 10), 6000);
 
         //ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
-
-        order.addOrderItem(OrderItem(PILLARID, order, productVariant1, quantity, "Stolper nedgraves 90cm i jord"));
-        order.addOrderItem(OrderItem(BEAMID, order, productVariant2, quantity, ""));
+        order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, quantity, "Stolper nedgraves 90cm i jord"));
+        order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, quantity, ""));
 
     }
 
@@ -57,7 +57,7 @@ public class Calculator {
 
      //   ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, RAFTERID, connectionPool);
 
-        order.addOrderItem(OrderItem(order, productVariant, quantityOfRafters, "Spær til tag"));
+     //   order.addOrderItem(OrderItem(order, productVariant, quantityOfRafters, "Spær til tag"));
     }
 
     //Denne metode er seperat for at kunne unit testes
