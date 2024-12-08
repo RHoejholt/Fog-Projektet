@@ -1,5 +1,7 @@
 package app.entities;
 
+import java.util.ArrayList;
+
 public class Order {
 
 
@@ -7,6 +9,7 @@ public class Order {
     private int width;
     private int status;
     private int id;
+    private ArrayList<OrderItem> orderItems = new ArrayList<>();
 
     public Order(int width, int id, int length, int status) {
         this.width = width;
@@ -22,5 +25,10 @@ public class Order {
 
     public int getWidth() {
         return width;
+    }
+
+    public boolean addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        return true;
     }
 }
