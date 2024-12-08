@@ -35,4 +35,17 @@ public class OrderItem {
     public String getDescription() {
         return description;
     }
+
+
+    @Override
+    public String toString() {
+        return "OrderItem {" +
+                "\n orderItemId=" + orderItemId +
+                "\n, order=" + (order != null ? order.getOrderId() : "null") +
+                "\n, productVariant=" + (productVariant != null ? productVariant.getProductVariantId() : "null") +
+                "\n, quantity=" + quantity +
+                "\n, description='" + description + '\'' +
+                '}';
+    }
+
 }
