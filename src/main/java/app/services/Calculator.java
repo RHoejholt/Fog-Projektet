@@ -36,11 +36,12 @@ public class Calculator {
         int quantity = 2 * (2 + (carportLength - MAX_DIST - OVERHANG) / MAX_DIST);
 
         extraPillars = 0;
-        calcBeams(); // Adds extra pillars if needed
+        calcExtraPillars(); // Adds extra pillars if needed
         quantity += extraPillars;
 
         ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
         order.addOrderItem(OrderItem(order, productVariant, quantity, "Stolper nedgraves 90cm i jord"));
+        order.addOrderItem(//beam);
 
     }
 
@@ -54,11 +55,10 @@ public class Calculator {
     }
 
     //Denne metode er seperat for at kunne unit testes
-    private void calcBeams() {
+    private void calcExtraPillars() {
         int carportLength = order.getLength();
         if (carportLength >= MAX_PLANK_LENGTH) {
             extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
         }
-        order.addOrderItem(//beam)
     }
 }
