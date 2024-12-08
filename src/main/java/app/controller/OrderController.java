@@ -15,10 +15,10 @@ public class OrderController {
         ArrayList<OrderItem> itemList = new ArrayList<>();
 
         // Calculate pillar and beams
-        itemList.add(calculator.calcPillarAndBeams());
+        calculator.calcPillarAndBeams();
 
         // Calculate rafters
-        itemList.add(calculator.calcRafters());
+        calculator.calcRafters();
 
         return itemList;
     }
