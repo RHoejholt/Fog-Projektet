@@ -31,4 +31,8 @@ public class Order {
         orderItems.add(orderItem);
         return true;
     }
+
+    public int getSize() {
+        return orderItems.size();
+    }
 }

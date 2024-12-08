@@ -17,7 +17,7 @@ public class ProductMapper {
     public List<ProductVariant> getVariantsByProductIdAndMinLength(int minLength, int productId, ConnectionPool connectionPool) throws DatabaseException {
     //hent korresponderene ting fra database
         List<ProductVariant> listOfMatches = new ArrayList<>();
-        listOfMatches.add();
+       // listOfMatches.add();
     return listOfMatches;
     }
 }
