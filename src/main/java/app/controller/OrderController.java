@@ -8,26 +8,18 @@ import java.util.ArrayList;
 
 public class OrderController {
 
-    Calculator calculator = new Calculator();
+    public ArrayList<OrderItem> renderItemList(Order order) throws Exception {
+        // Initialize Calculator with the order
+        Calculator calculator = new Calculator(order);
 
-    public static ArrayList<OrderItem> renderItemList(Order order){
+        ArrayList<OrderItem> itemList = new ArrayList<>();
 
-        ArrayList<OrderItem> itemList = new ArrayList<OrderItem>();
+        // Calculate pillar and beams
+        itemList.add(calculator.calcPillarAndBeams());
 
-        // calculate pillar
-        // takes length of carport
-        itemList.add(Calculator.calcPillarAndBeams(order.getLength()));
-
-        // calculate raft
-        itemList.add(Calculator.calcRafters(order.getLength(), order.getWidth()));
-
-
-
-
+        // Calculate rafters
+        itemList.add(calculator.calcRafters());
 
         return itemList;
     }
-
-
-
 }
