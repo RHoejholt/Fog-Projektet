@@ -3,12 +3,12 @@ package app.entities;
 public class ProductVariant {
 
         private int productVariantId;
-        private Product product;
+        private Product productId;
         private int length;
 
     public ProductVariant(int productVariantId, Product product, int length) {
         this.productVariantId = productVariantId;
-        this.product = product;
+        this.productId = product;
         this.length = length;
     }
 
@@ -16,8 +16,8 @@ public class ProductVariant {
         return productVariantId;
     }
 
-    public Product getProduct() {
-        return product;
+    public Product getProductId() {
+        return productId;
     }
 
     public int getLength() {
