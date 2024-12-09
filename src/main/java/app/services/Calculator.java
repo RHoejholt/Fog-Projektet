@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Calculator {
-
     //Alle mål i mm.
     private static final int OVERHANG = 1300;
     private static final int MAX_DIST = 3500;
@@ -27,9 +26,12 @@ public class Calculator {
     private Order order;
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    private ProductMapper productMapper;
 
-    public Calculator(Order order) {
+    public Calculator(Order order, ConnectionPool connectionPool) {
         this.order = order;
+        this.connectionPool = connectionPool;
+        this.productMapper = new ProductMapper(connectionPool);
     }
 
     // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
@@ -39,34 +41,39 @@ public class Calculator {
 
         quantity += calcExtraPillars(); // Adds extra pillars if needed
 
-        ProductVariant productVariantPillar = new ProductVariant(PILLARID, new Product(PILLARID, "Pillar", "kage", 10), 6000);
-        ProductVariant productVariantBeam = new ProductVariant(BEAMID, new Product(BEAMID, "Beam", "kage", 10), 6000);
+        ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
 
-        //ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
-        order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, quantity, "Stolper nedgraves 90cm i jord"));
-        order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, quantity, ""));
+        if (productVariantPillar != null) {
 
-    }
-
-    //Spær
-    public void calcRafters() throws DatabaseException {
-        int carportWidth = order.getWidth();
-        int quantityOfRafters = (carportWidth - 5) / RAFTER_SEPARATION_DISTANCE;
-
-
-
-     //   ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, RAFTERID, connectionPool);
-
-     //   order.addOrderItem(OrderItem(order, productVariant, quantityOfRafters, "Spær til tag"));
-    }
-
-    //Denne metode er seperat for at kunne unit testes
-    private int calcExtraPillars() {
-        int extraPillars = 0;
-        int carportLength = order.getLength();
-        if (carportLength >= MAX_PLANK_LENGTH) {
-            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, quantity, "Stolper nedgraves 90cm i jord"));
         }
-        return extraPillars;
+        ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
+        if (productVariantBeam  != null) {
+
+
+            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, quantity, ""));
+            }
+        }
+
+        //Spær
+        public void calcRafters () throws DatabaseException {
+            int carportWidth = order.getWidth();
+            int quantityOfRafters = (carportWidth - 5) / RAFTER_SEPARATION_DISTANCE;
+
+
+            //   ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, RAFTERID, connectionPool);
+
+            //   order.addOrderItem(OrderItem(order, productVariant, quantityOfRafters, "Spær til tag"));
+        }
+
+        //Denne metode er seperat for at kunne unit testes
+        private int calcExtraPillars() {
+            int carportLength = order.getLength();
+            int extraPillars = 0;
+            if (carportLength >= MAX_PLANK_LENGTH) {
+                extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+            }
+            return extraPillars;
     }
 }
+
