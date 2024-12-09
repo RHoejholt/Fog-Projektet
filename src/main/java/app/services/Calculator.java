@@ -17,8 +17,8 @@ public class Calculator {
     private static final int OVERHANG = 1300;
     private static final int MAX_DIST = 3500;
     private static final int PILLARID = 1;  //Vi bruger "pillar" da "post" har flere betydninger
-    private static final int RAFTERID = 3;
-    private static final int BEAMID = 2;
+    private static final int RAFTERID = 3; //SPÆR
+    private static final int BEAMID = 2; //REMME
     private static final int MAX_PLANK_LENGTH = 6000;
     private static final int RAFTER_SEPARATION_DISTANCE = 550;
 
@@ -39,8 +39,8 @@ public class Calculator {
 
         quantity += calcExtraPillars(); // Adds extra pillars if needed
 
-        ProductVariant productVariantPillar = new ProductVariant(1, new Product(1, "Pillar", "kage", 10), 6000);
-        ProductVariant productVariantBeam = new ProductVariant(2, new Product(2, "Beam", "kage", 10), 6000);
+        ProductVariant productVariantPillar = new ProductVariant(PILLARID, new Product(PILLARID, "Pillar", "kage", 10), 6000);
+        ProductVariant productVariantBeam = new ProductVariant(BEAMID, new Product(BEAMID, "Beam", "kage", 10), 6000);
 
         //ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, PILLARID, connectionPool);
         order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, quantity, "Stolper nedgraves 90cm i jord"));
