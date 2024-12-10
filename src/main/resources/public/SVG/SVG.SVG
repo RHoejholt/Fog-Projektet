@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="500" viewBox="-70 -10 600 500" >
+    <!-- Background -->
+    <rect x="-40" y="-30" width="860" height="460" fill="white"/>
+
+    <!-- Frame beams -->
+    <!-- Top beam -->
+    <rect x="0" y="0" width="500" height="10" fill="none" stroke="black" stroke-width="1"/>
+    <!-- Bottom beam -->
+    <rect x="0" y="390" width="500" height="10" fill="none" stroke="black" stroke-width="1"/>
+    <!-- Left beam -->
+    <rect x="0" y="0" width="10" height="400" fill="none" stroke="black" stroke-width="1"/>
+    <!-- Right beam -->
+    <rect x="490" y="0" width="10" height="400" fill="none" stroke="black" stroke-width="1"/>
+
+    <!-- Diagonal lines -->
+    <line x1="10" y1="10" x2="490" y2="390" stroke="black" stroke-dasharray="5,5" stroke-width="1"/>
+    <line x1="490" y1="10" x2="10" y2="390" stroke="black" stroke-dasharray="5,5" stroke-width="1"/>
+
+    <!-- Small square markers -->
+    <!-- Top markers -->
+    <rect x="100" y="5" width="10" height="10" fill="white" stroke="black"/>
+    <rect x="250" y="5" width="10" height="10" fill="white" stroke="black"/>
+    <rect x="400" y="5" width="10" height="10" fill="white" stroke="black"/>
+
+    <!-- Bottom markers -->
+    <rect x="100" y="385" width="10" height="10" fill="white" stroke="black"/>
+    <rect x="250" y="385" width="10" height="10" fill="white" stroke="black"/>
+    <rect x="400" y="385" width="10" height="10" fill="white" stroke="black"/>
+
+    <!-- Dimension arrows -->
+    <!-- Horizontal dimension -->
+    <line x1="0" y1="410" x2="500" y2="410" stroke="black" stroke-width="1" marker-start="url(#arrow-reverse)" marker-end="url(#arrow)"/>
+    <text x="250" y="425" font-size="14" text-anchor="middle" fill="black">780 cm</text>
+
+    <!-- Vertical dimension -->
+    <line x1="-20" y1="0" x2="-20" y2="400" stroke="black" stroke-width="1" marker-start="url(#arrow-reverse)" marker-end="url(#arrow)"/>
+    <text x="-35" y="210" font-size="14" text-anchor="middle" fill="black" transform="rotate(-90 -35,200)">600 cm</text>
+
+    <!-- Arrow markers -->
+    <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+        <marker id="arrow-reverse" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto" markerUnits="strokeWidth">
+            <path d="M 10 0 L 0 5 L 10 10 z" fill="black"/>
+        </marker>
+    </defs>
+</svg>
