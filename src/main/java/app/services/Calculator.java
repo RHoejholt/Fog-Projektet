@@ -55,18 +55,26 @@ public class Calculator {
             }
         }
 
-        //Spær
-        public void calcRafters () throws DatabaseException {
-            int carportWidth = order.getWidth();
-            int quantityOfRafters = (carportWidth - 5) / RAFTER_SEPARATION_DISTANCE;
+    // Rafters calculation
+    public void calcRafters() throws DatabaseException {
+        int carportWidth = order.getWidth(); // Width of the carport in mm
 
+        // Calculate the number of rafters based on the separation distance
+        int quantityOfRafters = (carportWidth + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
 
-            //   ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(0, RAFTERID, connectionPool);
+        // Fetch the appropriate product variant for rafters
+        ProductVariant rafterVariant = ProductMapper.getVariantsByProductIdAndMinLength(RAFTERID, 0);
 
-            //   order.addOrderItem(OrderItem(order, productVariant, quantityOfRafters, "Spær til tag"));
+        if (rafterVariant == null) {
+            throw new DatabaseException("No suitable rafter variant found for the given minimum length.");
         }
 
-        //Denne metode er seperat for at kunne unit testes
+        // Add rafters as an OrderItem to the order
+        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, quantityOfRafters, "Spær til tag"));
+    }
+
+
+    //Denne metode er seperat for at kunne unit testes
         private int calcExtraPillars() {
             int carportLength = order.getLength();
             int extraPillars = 0;
