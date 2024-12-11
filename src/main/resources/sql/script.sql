@@ -3,23 +3,104 @@
 BEGIN;
 
 
+CREATE TABLE IF NOT EXISTS public.dimensioner_bredde
+(
+    bredde_id serial NOT NULL,
+    bredde integer NOT NULL,
+    CONSTRAINT dimensioner_bredde_pkey PRIMARY KEY (bredde_id),
+    CONSTRAINT unique_bredde UNIQUE (bredde)
+    );
+
+CREATE TABLE IF NOT EXISTS public.dimensioner_laengde
+(
+    laengde_id serial NOT NULL,
+    laengde integer NOT NULL,
+    CONSTRAINT dimensioner_laengde_pkey PRIMARY KEY (laengde_id),
+    CONSTRAINT "uniqe_længde" UNIQUE (laengde)
+    );
+
+CREATE TABLE IF NOT EXISTS public.order_item
+(
+    order_item_id serial NOT NULL,
+    order_id integer,
+    product_variant_id integer,
+    quantity integer,
+    description character varying(100) COLLATE pg_catalog."default",
+    CONSTRAINT order_item_pkey PRIMARY KEY (order_item_id)
+    );
+
 CREATE TABLE IF NOT EXISTS public.orders
 (
     order_id serial NOT NULL,
-    date_placed date DEFAULT NOW(),
-    status character varying(64) NOT NULL,
-    user_id integer default NULL,
-    PRIMARY KEY (order_id)
-);
+    date_placed date DEFAULT now(),
+    status character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    user_id integer,
+    bredde integer,
+    "længde" integer,
+    "spær_og_rem_materiale" character varying COLLATE pg_catalog."default",
+    tag_materiale character varying COLLATE pg_catalog."default",
+    tag_type character varying COLLATE pg_catalog."default",
+    skur character varying COLLATE pg_catalog."default",
+    CONSTRAINT orders_pkey PRIMARY KEY (order_id)
+    );
+
+CREATE TABLE IF NOT EXISTS public.product
+(
+    product_id serial NOT NULL,
+    name character varying(100) COLLATE pg_catalog."default",
+    unit character varying COLLATE pg_catalog."default",
+    price integer,
+    CONSTRAINT product_pkey PRIMARY KEY (product_id)
+    );
+
+CREATE TABLE IF NOT EXISTS public.product_variant
+(
+    product_variant_id serial NOT NULL,
+    length integer,
+    product_id integer,
+    CONSTRAINT product_variant_pkey PRIMARY KEY (product_variant_id)
+    );
+
+CREATE TABLE IF NOT EXISTS public.skur
+(
+    id serial NOT NULL,
+    skur character varying COLLATE pg_catalog."default",
+    CONSTRAINT skur_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_skur UNIQUE (skur)
+    );
+
+CREATE TABLE IF NOT EXISTS public.spaer_og_rem
+(
+    spaer_og_rem_id serial NOT NULL,
+    materiale character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT spaer_og_rem_pkey PRIMARY KEY (spaer_og_rem_id),
+    CONSTRAINT "unique_spær_og_rem" UNIQUE (materiale)
+    );
+
+CREATE TABLE IF NOT EXISTS public.tag_materiale
+(
+    id serial NOT NULL,
+    materiale character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT tag_materiale_pkey PRIMARY KEY (id),
+    CONSTRAINT unique_tag_materiale UNIQUE (materiale)
+    );
 
 CREATE TABLE IF NOT EXISTS public.users
 (
     user_id serial NOT NULL,
-    username character varying(64) NOT NULL UNIQUE,
-    password character varying(64) NOT NULL,
-    role character varying(12) NOT NULL,
-    PRIMARY KEY (user_id)
+    username character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    password character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    role character varying(12) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT users_pkey PRIMARY KEY (user_id),
+    CONSTRAINT users_username_key UNIQUE (username)
     );
+
+ALTER TABLE IF EXISTS public.order_item
+    ADD CONSTRAINT order_item_product_variant_id_fkey FOREIGN KEY (product_variant_id)
+    REFERENCES public.product_variant (product_variant_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
 
 ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT fk FOREIGN KEY (user_id)
@@ -28,12 +109,53 @@ ALTER TABLE IF EXISTS public.orders
     ON DELETE NO ACTION
     NOT VALID;
 
-CREATE TABLE IF NOT EXISTS public.tag_materiale (
-    id serial NOT NULL,
-    materiale character varying(64) NOT NULL,
-    tag_type character varying(64) NOT NULL,
-    PRIMARY KEY (id)
-);
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT fk_bredde FOREIGN KEY (bredde)
+    REFERENCES public.dimensioner_bredde (bredde) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT "fk_længde" FOREIGN KEY ("længde")
+    REFERENCES public.dimensioner_laengde (laengde) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT fk_skur FOREIGN KEY (skur)
+    REFERENCES public.skur (skur) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT "fk_spær_og_rem_materiale" FOREIGN KEY ("spær_og_rem_materiale")
+    REFERENCES public.spaer_og_rem (materiale) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.orders
+    ADD CONSTRAINT fk_tag_materiale FOREIGN KEY (tag_materiale)
+    REFERENCES public.tag_materiale (materiale) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION
+    NOT VALID;
+
+
+ALTER TABLE IF EXISTS public.product_variant
+    ADD CONSTRAINT product_variant_product_id_fkey FOREIGN KEY (product_id)
+    REFERENCES public.product (product_id) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
 
 INSERT INTO public.dimensioner_bredde (bredde, id)
 VALUES
@@ -50,7 +172,7 @@ VALUES
     (570, 11),
     (600, 12);
 
-INSERT INTO public.dimensioner_længde (længde, id)
+INSERT INTO public.dimensioner_laengde (længde, id)
 VALUES
     (270, 1),
     (300, 2),
@@ -86,7 +208,7 @@ VALUES
     (1,Ja),
     (2,Nej);
 
-INSERT INTO public.spær_og_rem (id,materiale)
+INSERT INTO public.spaer_og_rem (id,materiale)
 VALUES
     (1,'Benders sort'),
     (2,'Benders brun'),
