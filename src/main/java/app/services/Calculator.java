@@ -35,32 +35,35 @@ public class Calculator {
     }
 
     // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
-    public void calcPillarAndBeams() throws DatabaseException {
+    public int calcPillarAndBeams() throws DatabaseException {
         int carportLength = order.getLength();
         int quantity = 2 * (2 + (carportLength - MAX_DIST - OVERHANG) / MAX_DIST);
 
         quantity += calcExtraPillars(); // Adds extra pillars if needed
 
+        return quantity;
+    }
+
+    public void calculateAndAddToOrder(Order order) throws DatabaseException {
         ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
+
+        int result = calcPillarAndBeams();
 
         if (productVariantPillar != null) {
 
-            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, quantity, "Stolper nedgraves 90cm i jord"));
+            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, result, "Stolper nedgraves 90cm i jord"));
         }
         ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
-        if (productVariantBeam  != null) {
+        if (productVariantBeam != null) {
 
 
-            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, quantity, ""));
-            }
+            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, result, ""));
         }
 
-    // Rafters calculation
-    public void calcRafters() throws DatabaseException {
-        int carportWidth = order.getWidth(); // Width of the carport in mm
 
-        // Calculate the number of rafters based on the separation distance
-        int quantityOfRafters = (carportWidth + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
+
+
+
 
         // Fetch the appropriate product variant for rafters
         ProductVariant rafterVariant = ProductMapper.getVariantsByProductIdAndMinLength(RAFTERID, 0);
@@ -70,18 +73,29 @@ public class Calculator {
         }
 
         // Add rafters as an OrderItem to the order
-        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, quantityOfRafters, "Spær til tag"));
+        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, calcRafters(), "Spær til tag"));
+
+    }
+
+    // Rafters calculation
+    public int calcRafters() throws DatabaseException {
+        int carportWidth = order.getWidth(); // Width of the carport in mm
+
+        // Calculate the number of rafters based on the separation distance
+        int quantityOfRafters = (carportWidth + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
+
+        return quantityOfRafters;
     }
 
 
     //Denne metode er seperat for at kunne unit testes
-        private int calcExtraPillars() {
-            int carportLength = order.getLength();
-            int extraPillars = 0;
-            if (carportLength >= MAX_PLANK_LENGTH) {
-                extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
-            }
-            return extraPillars;
+    private int calcExtraPillars() {
+        int carportLength = order.getLength();
+        int extraPillars = 0;
+        if (carportLength >= MAX_PLANK_LENGTH) {
+            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+        }
+        return extraPillars;
     }
 }
 

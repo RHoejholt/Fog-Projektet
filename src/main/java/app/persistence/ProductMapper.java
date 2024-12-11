@@ -1,5 +1,6 @@
 package app.persistence;
 
+import app.Main;
 import app.entities.Product;
 import app.entities.ProductVariant;
 import app.entities.User;

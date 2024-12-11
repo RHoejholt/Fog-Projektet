@@ -3,7 +3,9 @@ package app;
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controller.UserController;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
+import app.services.Calculator;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -11,7 +13,7 @@ public class Main {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "fog";
+    private static final String DB = "postgres";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
@@ -28,5 +30,16 @@ public class Main {
         // Routing
         app.get("/", ctx -> ctx.render("index.html"));
         UserController.addRoutes(app,connectionPool);
+
+
+        try {
+            Order order = new Order(10, 1, 500, 1);
+
+            Calculator calculator = new Calculator(order, connectionPool);
+            calculator.calcPillarAndBeams();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }
