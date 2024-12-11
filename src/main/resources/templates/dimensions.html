@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Carport Dimensions</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
 </head>
 <body>
-<h1>Select Carport Dimensions</h1>
 
 <!-- Include the navbar fragment -->
 <div th:replace="~{navbar :: navbar}"></div>
@@ -14,6 +14,7 @@
 
 <!-- Form to submit selected dimensions -->
 <!-- Change /dimensions to where the submit button needs to lead to. This is only temporary -->
+<div class="container">
 <form action="/dimensions" method="POST">
     <!-- Dropdown for Bredde -->
     <label for="bredde">Bredde:</label>
@@ -66,6 +67,7 @@
     <!-- Submit button -->
     <button type="submit">Submit</button>
 </form>
+</div>
 
 <!-- Display error or success message -->
 <p th:text="${message}"></p>
