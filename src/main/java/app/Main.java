@@ -35,11 +35,10 @@ public class Main {
         try {
             Order order = new Order(10, 1, 500, 1);
 
-            Calculator calculator = new Calculator(order, connectionPool);
-            calculator.calcPillarAndBeams();
+            Calculator calculator = new Calculator(connectionPool);
+            calculator.calculateAndAddToOrder(order);
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 }

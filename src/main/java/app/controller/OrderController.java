@@ -12,15 +12,12 @@ public class OrderController {
 
     public ArrayList<OrderItem> renderItemList(Order order) throws Exception {
         // Initialize Calculator with the order
-        Calculator calculator = new Calculator(order, connectionPool);
+        Calculator calculator = new Calculator(connectionPool);
 
         ArrayList<OrderItem> itemList = new ArrayList<>();
 
         // Calculate pillar and beams
-        calculator.calcPillarAndBeams();
-
-        // Calculate rafters
-        calculator.calcRafters();
+        calculator.calculateAndAddToOrder(order);
 
         return itemList;
     }

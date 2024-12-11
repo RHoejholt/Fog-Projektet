@@ -2,7 +2,6 @@ package app.services;
 
 import app.entities.Order;
 import app.entities.OrderItem;
-import app.entities.Product;
 import app.entities.ProductVariant;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
@@ -23,23 +22,24 @@ public class Calculator {
 
     private static ConnectionPool connectionPool;
 
-    private Order order;
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private ProductMapper productMapper;
 
-    public Calculator(Order order, ConnectionPool connectionPool) {
-        this.order = order;
+    public Calculator(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
         this.productMapper = new ProductMapper(connectionPool);
     }
 
     // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
-    public int calcPillarAndBeams() throws DatabaseException {
-        int carportLength = order.getLength();
+    public static int calcPillar(int carportLength)  {
         int quantity = 2 * (2 + (carportLength - MAX_DIST - OVERHANG) / MAX_DIST);
 
-        quantity += calcExtraPillars(); // Adds extra pillars if needed
+        int extraPillars = 0;
+        if (carportLength >= MAX_PLANK_LENGTH) {
+            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+        }
+        quantity += extraPillars; // Adds extra pillars if needed
 
         return quantity;
     }
@@ -47,17 +47,19 @@ public class Calculator {
     public void calculateAndAddToOrder(Order order) throws DatabaseException {
         ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
 
-        int result = calcPillarAndBeams();
-
         if (productVariantPillar != null) {
 
-            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, result, "Stolper nedgraves 90cm i jord"));
+            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, calcPillar(order.getLength()), "Stolper nedgraves 90cm i jord"));
         }
+
+
+
+
         ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
         if (productVariantBeam != null) {
 
 
-            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, result, ""));
+            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, calcBeams(order.getLength()), ""));
         }
 
 
@@ -73,13 +75,18 @@ public class Calculator {
         }
 
         // Add rafters as an OrderItem to the order
-        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, calcRafters(), "Spær til tag"));
+        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, calcRafters(order.getWidth()), "Spær til tag"));
 
     }
 
+    public static int calcBeams(int carportLength) {
+
+        //TODO: make it do the thing
+        return 0;
+    }
+
     // Rafters calculation
-    public int calcRafters() throws DatabaseException {
-        int carportWidth = order.getWidth(); // Width of the carport in mm
+    public static int calcRafters(int carportWidth) {
 
         // Calculate the number of rafters based on the separation distance
         int quantityOfRafters = (carportWidth + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
@@ -87,15 +94,5 @@ public class Calculator {
         return quantityOfRafters;
     }
 
-
-    //Denne metode er seperat for at kunne unit testes
-    private int calcExtraPillars() {
-        int carportLength = order.getLength();
-        int extraPillars = 0;
-        if (carportLength >= MAX_PLANK_LENGTH) {
-            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
-        }
-        return extraPillars;
-    }
 }
 
