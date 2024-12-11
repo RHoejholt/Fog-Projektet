@@ -31,8 +31,8 @@ ALTER TABLE IF EXISTS public.orders
     NOT VALID;
 
 CREATE TABLE IF NOT EXISTS public.tag_materiale (
-                                                    id serial NOT NULL,
-                                                    materiale character varying(64) NOT NULL,
+    id serial NOT NULL,
+    materiale character varying(64) NOT NULL,
     tag_type character varying(64) NOT NULL,
     PRIMARY KEY (id)
     );
