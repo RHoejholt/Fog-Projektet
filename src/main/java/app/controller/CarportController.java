@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.entities.User;
 import app.exception.DatabaseException;
 import app.persistence.ConnectionPool;
 import io.javalin.Javalin;
@@ -18,7 +19,7 @@ public class CarportController {
         showDimensionsForm(ctx, dbConnection);
         showTagMaterialeForm(ctx, dbConnection);
         showSkurForm(ctx, dbConnection);
-        showSpærOgRemForm(ctx,dbConnection);
+        showSpaerOgRemForm(ctx,dbConnection);
         // Render the form with dynamic options
         ctx.render("dimensions.html");
     }
@@ -48,13 +49,13 @@ public class CarportController {
     // Method to show the dimensions form
     private static void showDimensionsForm(Context ctx, ConnectionPool dbConnection) {
         try {
-            // Query the database to get the available 'bredde' and 'længde' options using getDimensionOptions
+            // Query the database to get the available 'bredde' and 'laengde' options using getDimensionOptions
             List<String> breddeOptions = getDimensionOptions("bredde", "dimensioner_bredde", dbConnection);
-            List<String> længdeOptions = getDimensionOptions("længde", "dimensioner_længde", dbConnection);
+            List<String> laengdeOptions = getDimensionOptions("laengde", "dimensioner_laengde", dbConnection);
 
             // Add the options to the context so Thymeleaf can access them
             ctx.attribute("breddeOptions", breddeOptions);
-            ctx.attribute("længdeOptions", længdeOptions);
+            ctx.attribute("laengdeOptions", laengdeOptions);
         } catch (DatabaseException e) {
             ctx.attribute("message", "Error fetching dimensions: " + e.getMessage());
         }
@@ -67,42 +68,51 @@ public class CarportController {
     }
 
     // Handle the form submission
-    // Might be irrelevant code, but probably not
     private static void submitForm(Context ctx, ConnectionPool dbConnection) {
-        // Receive the form parameters (bredde and længde)
+        // Receive the form parameters
         String bredde = ctx.formParam("bredde");
-        String længde = ctx.formParam("længde");
+        String laengde = ctx.formParam("laengde");
         String tagMateriale = ctx.formParam("tagMateriale");
         String skur = ctx.formParam("skur");
+        String spaerOgRem = ctx.formParam("spaer_og_rem");
 
         // Add simple validation for dimensions
-        if (bredde == null || længde == null) {
-            ctx.attribute("message", "Venligst vælg både bredde og længde.");
+        if (bredde == null || laengde == null || tagMateriale == null || skur == null || spaerOgRem == null) {
+            ctx.attribute("message", "Venligst udfyld alle felter.");
             showAllForms(ctx, dbConnection);
-        } else if (tagMateriale == null) {
-            ctx.attribute("message", "Venligst vælg tag materiale.");
-            showAllForms(ctx, dbConnection);
-        } else if (skur == null) {
-            ctx.attribute("message", "Venligst vælg skur eller ej.");
-            showAllForms(ctx, dbConnection);
+            return;
         }
-        // Process the dimensions (e.g., save to session or database)
-        // Can be changed away from session and made to send to database instead, to store orders.
-        ctx.sessionAttribute("bredde", bredde);
-        ctx.sessionAttribute("længde", længde);
-        ctx.sessionAttribute("skur",skur);
-        // ctx.redirect("/nextpage");  // Redirect to another page for further action
+        try {
+            // Retrieve the logged-in user's ID from the session
+            User userId = ctx.sessionAttribute("currentUser");
+            if (userId == null) {
+                ctx.attribute("message", "Du skal være logget ind for at afgive en ordre.");
+                showAllForms(ctx, dbConnection);
+                return;
+            }
+
+            // Send data to database
+            CarportMapper.submitFormToDatabase(bredde, laengde, tagMateriale, skur, spaerOgRem, userId, dbConnection);
+
+            // Success message
+            ctx.attribute("message", "Tak for din ordre. En besked er nu sendt til sælgeren og du vil blive kontaktet snarest. Husk at tjekke din email og spam folder");
+        } catch (DatabaseException e) {
+            ctx.attribute("message", "Fejl: " + e.getMessage());
+        }
+
+        // Render the form again with success/error message
+        showAllForms(ctx, dbConnection);
     }
 
-    private static void showSpærOgRemForm(Context ctx, ConnectionPool dbConnection) {
+    private static void showSpaerOgRemForm(Context ctx, ConnectionPool dbConnection) {
         try {
             // Query the database to get the available column and table
-            List<String> spærOgRemOptions = getDimensionOptions("materiale", "spær_og_rem", dbConnection);
+            List<String> spaerOgRemOptions = getDimensionOptions("materiale", "spaer_og_rem", dbConnection);
 
             // Add the options to the context so Thymeleaf can access them
-            ctx.attribute("spærOgRemOptions", spærOgRemOptions);
+            ctx.attribute("spaerOgRemOptions", spaerOgRemOptions);
         } catch (DatabaseException e) {
-            ctx.attribute("message", "Error fetching Spær og Rem materials: " + e.getMessage());
+            ctx.attribute("message", "Fejl på at finde Spær og Rem materialer: " + e.getMessage());
         }
     }
 }
