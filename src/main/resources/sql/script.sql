@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS public.tag_materiale
 (
     id serial NOT NULL,
     materiale character varying(64) COLLATE pg_catalog."default" NOT NULL,
+	tag_type character varying (16) NOT NULL,
     CONSTRAINT tag_materiale_pkey PRIMARY KEY (id),
     CONSTRAINT unique_tag_materiale UNIQUE (materiale)
     );
@@ -157,7 +158,7 @@ ALTER TABLE IF EXISTS public.product_variant
     ON DELETE NO ACTION;
 
 
-INSERT INTO public.dimensioner_bredde (bredde, id)
+INSERT INTO public.dimensioner_bredde (bredde, bredde_id)
 VALUES
     (270, 1),
     (300, 2),
@@ -172,7 +173,7 @@ VALUES
     (570, 11),
     (600, 12);
 
-INSERT INTO public.dimensioner_laengde (længde, id)
+INSERT INTO public.dimensioner_laengde (laengde, laengde_id)
 VALUES
     (270, 1),
     (300, 2),
@@ -205,8 +206,8 @@ VALUES
 
 INSERT INTO public.skur (id,skur)
 VALUES
-    (1,Ja),
-    (2,Nej);
+    (1,'Ja'),
+    (2,'Nej');
 
 INSERT INTO public.spaer_og_rem (id,materiale)
 VALUES
