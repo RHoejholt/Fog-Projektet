@@ -16,15 +16,22 @@
         <h1>Lad os tegne din drømme carport - bestil din skræddersyede carport her!</h1>
         <p>Vælg nedenfor, om du ønsker tilbud på carport med fladt tag eller carport med høj rejsning.</p>
         <div class="buttons">
-            <a href="/dimensions" class="button">
-                <img src="/images/flat-roof-icon.png" alt="Fladt Tag">
-                <span>Carport med fladt tag</span>
-            </a>
-            <a href="/dimensions" class="button">
-                <img src="/images/high-pitch-icon.png" alt="Høj Rejsning">
-                <span>Carport med høj rejsning</span>
-            </a>
+            <form action="/dimensions" method="POST">
+                <input type="hidden" name="tag_type" value="fladt tag"/>
+                <button type="submit" class="button">
+                    <img src="/images/flat-roof-icon.png" alt="Fladt Tag">
+                    <span>Carport med fladt tag</span>
+                </button>
+            </form>
 
+            <!-- Form for High Pitch -->
+            <form action="/dimensions" method="POST">
+                <input type="hidden" name="tag_type" value="skrå tag"/>
+                <button type="submit" class="button">
+                    <img src="/images/high-pitch-icon.png" alt="Høj Rejsning">
+                    <span>Carport med høj rejsning</span>
+                </button>
+            </form>
         </div>
         <br>
         <div th:if="${#ctx.message!=null}" th:text="${#ctx.message}" class="alert" role="alert">
