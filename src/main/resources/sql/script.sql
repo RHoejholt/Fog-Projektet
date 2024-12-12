@@ -2,7 +2,6 @@
 -- Please log an issue at https://github.com/pgadmin-org/pgadmin4/issues/new/choose if you find any bugs, including reproduction steps.
 BEGIN;
 
-
 CREATE TABLE IF NOT EXISTS public.orders
 (
     order_id serial NOT NULL,
@@ -10,9 +9,7 @@ CREATE TABLE IF NOT EXISTS public.orders
     status character varying(64) NOT NULL,
     user_id integer default NULL,
     PRIMARY KEY (order_id)
-    );
-
-
+);
 
 CREATE TABLE IF NOT EXISTS public.users
 (
@@ -21,42 +18,42 @@ CREATE TABLE IF NOT EXISTS public.users
     password character varying(64) NOT NULL,
     role character varying(12) NOT NULL,
     PRIMARY KEY (user_id)
-    );
+);
 
 ALTER TABLE IF EXISTS public.orders
     ADD CONSTRAINT fk FOREIGN KEY (user_id)
-    REFERENCES public.users (user_id) MATCH SIMPLE
-    ON UPDATE NO ACTION
-       ON DELETE NO ACTION
-    NOT VALID;
+        REFERENCES public.users (user_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID;
 
 CREATE TABLE IF NOT EXISTS public.tag_materiale (
-                                                    id serial NOT NULL,
-                                                    materiale character varying(64) NOT NULL,
+    id serial NOT NULL,
+    materiale character varying(64) NOT NULL,
     tag_type character varying(64) NOT NULL,
     PRIMARY KEY (id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS public.dimensioner_bredde
 (
     bredde_id serial NOT NULL,
     bredde integer NOT NULL,
     PRIMARY KEY (bredde_id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS public.dimensioner_laengde
 (
     laengde_id serial NOT NULL,
     laengde integer NOT NULL,
     PRIMARY KEY (laengde_id)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS public.spaer_og_rem
 (
     spaer_og_rem_id serial NOT NULL,
     materiale character varying(64) NOT NULL,
     PRIMARY KEY (spaer_og_rem_id)
-    );
+);
 
 INSERT INTO public.spaer_og_rem (spaer_og_rem_id, materiale)
 VALUES
@@ -68,26 +65,26 @@ VALUES
 
 -- Table: product
 CREATE TABLE product (
-                         product_id SERIAL PRIMARY KEY,
-                         name VARCHAR(100),
-                         unit VARCHAR,
-                         price INTEGER
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    unit VARCHAR,
+    price INTEGER
 );
 
 -- Table: product_variant
 CREATE TABLE product_variant (
-                                 product_variant_id SERIAL PRIMARY KEY,
-                                 length INTEGER,
-                                 product_id INTEGER REFERENCES product(product_id)
+    product_variant_id SERIAL PRIMARY KEY,
+    length INTEGER,
+    product_id INTEGER REFERENCES product(product_id)
 );
 
 -- Table: order_item
 CREATE TABLE order_item (
-                            order_item_id SERIAL PRIMARY KEY,
-                            order_id INTEGER,
-                            product_variant_id INTEGER REFERENCES product_variant(product_variant_id),
-                            quantity INTEGER,
-                            description VARCHAR(100)
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INTEGER,
+    product_variant_id INTEGER REFERENCES product_variant(product_variant_id),
+    quantity INTEGER,
+    description VARCHAR(100)
 );
 
 INSERT INTO public.product (product_id, name, unit, price)
@@ -96,14 +93,12 @@ VALUES
     (2, 'Rafter', '', 10),
     (3, 'Beam', '', 10);
 
-
 INSERT INTO public.product_variant (product_variant_id, length, product_id)
 VALUES
     (1, '300',  1),
     (2, '480', 2),
     (3, '600', 2),
     (4, '600', 3);
-
 
 INSERT INTO public.dimensioner_bredde (bredde, bredde_id)
 VALUES
@@ -157,7 +152,5 @@ VALUES
     (1,Ja),
     (2,Nej);
 */
-
-
 
 END;
