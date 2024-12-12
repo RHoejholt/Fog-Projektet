@@ -70,11 +70,13 @@ public class CarportController {
     // Handle the form submission
     private static void submitForm(Context ctx, ConnectionPool dbConnection) {
         // Receive the form parameters
+        String tag_type = ctx.formParam("tag_type");
         String bredde = ctx.formParam("bredde");
         String laengde = ctx.formParam("laengde");
         String tagMateriale = ctx.formParam("tagMateriale");
         String skur = ctx.formParam("skur");
         String spaerOgRem = ctx.formParam("spaer_og_rem");
+        ctx.attribute("tag_type", tag_type); // Add it to the context
 
         // Add simple validation for dimensions
         if (bredde == null || laengde == null || tagMateriale == null || skur == null || spaerOgRem == null) {
@@ -92,7 +94,7 @@ public class CarportController {
             }
 
             // Send data to database
-            CarportMapper.submitFormToDatabase(bredde, laengde, tagMateriale, skur, spaerOgRem, userId, dbConnection);
+            CarportMapper.submitFormToDatabase(bredde, laengde, tagMateriale, skur, spaerOgRem, userId, tag_type, dbConnection);
 
             // Success message
             ctx.attribute("message", "Tak for din ordre. En besked er nu sendt til sælgeren og du vil blive kontaktet snarest. Husk at tjekke din email og spam folder");

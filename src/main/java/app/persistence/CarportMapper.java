@@ -37,9 +37,9 @@ public class CarportMapper {
         return options;
     }
 
-    public static void submitFormToDatabase(String bredde, String laengde, String tagMateriale, String skur, String spaerOgRem, User username, ConnectionPool dbConnection) throws DatabaseException {
-        String sql = "INSERT INTO orders (bredde, laengde, tag_materiale, skur, spaer_og_rem_materiale, date_placed, status, username) " +
-                "VALUES (?, ?, ?, ?, ?, CURRENT_DATE, 'pending', ?)";
+    public static void submitFormToDatabase(String bredde, String laengde, String tagMateriale, String skur, String spaerOgRem, User username,String tag_type, ConnectionPool dbConnection) throws DatabaseException {
+        String sql = "INSERT INTO orders (bredde, laengde, tag_materiale, skur, spaer_og_rem_materiale, date_placed, status, username, tag_type) " +
+                "VALUES (?, ?, ?, ?, ?, CURRENT_DATE, 'pending', ?,?)";
 
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -50,6 +50,7 @@ public class CarportMapper {
             stmt.setString(4, skur);
             stmt.setString(5, spaerOgRem);
             stmt.setString(6, username.getUsername());
+            stmt.setString(7, tag_type);
 
             stmt.executeUpdate();
         } catch (SQLException e) {
