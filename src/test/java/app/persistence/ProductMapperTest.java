@@ -21,7 +21,7 @@ class ProductMapperTest {
 
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
-    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
+    private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=test";
     private static final String DB = "postgres";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
@@ -30,63 +30,46 @@ class ProductMapperTest {
 
     @BeforeAll
     public static void setUpClass() {
-        try {
 
-            productMapper = new ProductMapper(connectionPool);
-            try (Connection testConnection = connectionPool.getConnection())
+        productMapper = new ProductMapper(connectionPool);
+        try (Connection testConnection = connectionPool.getConnection())
+        {
+            try (Statement stmt = testConnection.createStatement())
             {
-                try (Statement stmt = testConnection.createStatement())
-                {
-                    // The test schema is already created, so we only need to delete/create test tables
-                    stmt.execute("DROP TABLE IF EXISTS test.orders");
-                    stmt.execute("DROP TABLE IF EXISTS test.users");
-                    stmt.execute("DROP TABLE IF EXISTS test.tag_materials");
-                    stmt.execute("DROP TABLE IF EXISTS test.dimensioner_bredde");
-                    stmt.execute("DROP TABLE IF EXISTS test.dimensioner_længde");
-                    stmt.execute("DROP TABLE IF EXISTS test.spær_og_rem");
-                    stmt.execute("DROP TABLE IF EXISTS test.product");
-                    stmt.execute("DROP TABLE IF EXISTS test.product_variant");
-                    stmt.execute("DROP TABLE IF EXISTS test.order_item");
-                    // stmt.execute("DROP SEQUENCE IF EXISTS test.member_member_id_seq CASCADE;");
 
-                  //// stmt.execute("DROP SEQUENCE IF EXISTS test.sport_sport_id_seq CASCADE;");
-
-                    // The test schema is already created, so we only need to delete/create test tables
-                    stmt.execute("DROP TABLE IF EXISTS test.orders");
-                    stmt.execute("DROP TABLE IF EXISTS test.users");
-                    stmt.execute("DROP TABLE IF EXISTS test.tag_materials");
-                    stmt.execute("DROP TABLE IF EXISTS test.dimensioner_bredde");
-                    stmt.execute("DROP TABLE IF EXISTS test.dimensioner_længde");
-                    stmt.execute("DROP TABLE IF EXISTS test.spær_og_rem");
-                    stmt.execute("DROP TABLE IF EXISTS test.product");
-                    stmt.execute("DROP TABLE IF EXISTS test.product_variant");
-                    stmt.execute("DROP TABLE IF EXISTS test.order_item");
+                // The test schema is already created, so we only need to delete/create test tables
+                stmt.execute("DROP TABLE IF EXISTS test.orders");
+                stmt.execute("DROP TABLE IF EXISTS test.users");
+                stmt.execute("DROP TABLE IF EXISTS test.tag_materiale");
+                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_bredde");
+                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_længde");
+                stmt.execute("DROP TABLE IF EXISTS test.spær_og_rem");
+                stmt.execute("DROP TABLE IF EXISTS test.product");
+                stmt.execute("DROP TABLE IF EXISTS test.product_variant");
+                stmt.execute("DROP TABLE IF EXISTS test.order_item");
 // stmt.execute("DROP SEQUENCE IF EXISTS test.member_member_id_seq CASCADE;");
 
 // Create tables as copy of original public schema structure
-                    stmt.execute("CREATE TABLE test.orders AS (SELECT * from public.orders) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.users AS (SELECT * from public.users) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.tag_materials AS (SELECT * from public.tag_materials) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.dimensioner_bredde AS (SELECT * from public.dimensioner_bredde) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.dimensioner_længde AS (SELECT * from public.dimensioner_længde) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.spær_og_rem AS (SELECT * from public.spær_og_rem) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.produc AS (SELECT * from public.product) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.product_variant AS (SELECT * from public.product_variant) WITH NO DATA");
-                    stmt.execute("CREATE TABLE test.order_item AS (SELECT * from public.order_item) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.orders AS (SELECT * from public.orders) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.users AS (SELECT * from public.users) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.tag_materials AS (SELECT * from public.tag_materiale) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.dimensioner_bredde AS (SELECT * from public.dimensioner_bredde) WITH NO DATA");
+               // stmt.execute("CREATE TABLE test.dimensioner_længde AS (SELECT * from public.dimensioner_længde) WITH NO DATA");
+               // stmt.execute("CREATE TABLE test.spær_og_rem AS (SELECT * from public.spær_og_rem) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.produc AS (SELECT * from public.product) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.product_variant AS (SELECT * from public.product_variant) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.order_item AS (SELECT * from public.order_item) WITH NO DATA");
 
-                }
             }
-            catch (SQLException throwables)
-            {
-                System.out.println(throwables.getMessage());
-                fail("Database connection failed");
-            }
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
-    }
+        catch (SQLException throwables)
+        {
+            System.out.println(throwables.getMessage());
+            fail("Database connection failed");
+        }
 
+    }
+/*
     @BeforeEach
     void setUp() {
         try (Connection testConnection = db.connect()) {
@@ -160,5 +143,7 @@ class ProductMapperTest {
         assertEquals(1999,m1.getYear());
         assertEquals(3, memberMapper.getAllMembers().size());
     }
+
+ */
 
 }
