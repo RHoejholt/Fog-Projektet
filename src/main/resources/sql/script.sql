@@ -68,26 +68,26 @@ VALUES
 
 -- Table: product
 CREATE TABLE product (
-                         product_id SERIAL PRIMARY KEY,
-                         name VARCHAR(100),
-                         unit VARCHAR,
-                         price INTEGER
+    product_id SERIAL PRIMARY KEY,
+    name VARCHAR(100),
+    unit VARCHAR,
+    price INTEGER
 );
 
 -- Table: product_variant
 CREATE TABLE product_variant (
-                                 product_variant_id SERIAL PRIMARY KEY,
-                                 length INTEGER,
-                                 product_id INTEGER REFERENCES product(product_id)
+    product_variant_id SERIAL PRIMARY KEY,
+    length INTEGER,
+    product_id INTEGER REFERENCES product(product_id)
 );
 
 -- Table: order_item
 CREATE TABLE order_item (
-                            order_item_id SERIAL PRIMARY KEY,
-                            order_id INTEGER,
-                            product_variant_id INTEGER REFERENCES product_variant(product_variant_id),
-                            quantity INTEGER,
-                            description VARCHAR(100)
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INTEGER,
+    product_variant_id INTEGER REFERENCES product_variant(product_variant_id),
+    quantity INTEGER,
+    description VARCHAR(100)
 );
 
 INSERT INTO public.product (product_id, name, unit, price)
