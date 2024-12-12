@@ -27,11 +27,11 @@
     <br><br>
 
     <!-- Dropdown for Længde -->
-    <label for="længde">Længde:</label>
-    <select name="længde" id="længde">
+    <label for="laengde">Længde:</label>
+    <select name="laengde" id="laengde">
         <option value="" disabled selected>Vælg en længde</option>
-        <th:block th:each="længde : ${længdeOptions}">
-            <option th:value="${længde}" th:text="${længde}"></option>
+        <th:block th:each="laengde : ${laengdeOptions}">
+            <option th:value="${laengde}" th:text="${laengde}"></option>
         </th:block>
     </select>
     <br><br>
@@ -55,10 +55,10 @@
           </th:block>
     </select>
     <br><br>
-    <label for="spær_og_rem">Spær og Rem:</label>
-    <select name="spær_og_rem" id="spær_og_rem" required>
+    <label for="spaer_og_rem">Spær og Rem:</label>
+    <select name="spaer_og_rem" id="spaer_og_rem" required>
         <option value="" disabled selected>Vælg materiale</option>
-        <th:block th:each="materiale : ${spærOgRemOptions}">
+        <th:block th:each="materiale : ${spaerOgRemOptions}">
             <option th:value="${materiale}" th:text="${materiale}"></option>
         </th:block>
     </select>
@@ -70,6 +70,8 @@
 </div>
 
 <!-- Display error or success message -->
-<p th:text="${message}"></p>
+<div th:if="${#ctx.message!=null}" th:text="${#ctx.message}" class="alert" role="alert">
+    Fejlbeskeder
+</div>
 </body>
 </html>
