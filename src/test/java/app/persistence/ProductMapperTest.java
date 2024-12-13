@@ -1,4 +1,4 @@
-package persistence;
+package app.persistence;
 
 import app.entities.Product;
 import app.exception.DatabaseException;
@@ -36,29 +36,58 @@ class ProductMapperTest {
         {
             try (Statement stmt = testConnection.createStatement())
             {
-
-                // The test schema is already created, so we only need to delete/create test tables
-                stmt.execute("DROP TABLE IF EXISTS test.orders");
-                stmt.execute("DROP TABLE IF EXISTS test.users");
-                stmt.execute("DROP TABLE IF EXISTS test.tag_materiale");
-                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_bredde");
-                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_længde");
-                stmt.execute("DROP TABLE IF EXISTS test.spær_og_rem");
-                stmt.execute("DROP TABLE IF EXISTS test.product");
-                stmt.execute("DROP TABLE IF EXISTS test.product_variant");
+// Drop existing tables in the test schema
                 stmt.execute("DROP TABLE IF EXISTS test.order_item");
-// stmt.execute("DROP SEQUENCE IF EXISTS test.member_member_id_seq CASCADE;");
+                stmt.execute("DROP TABLE IF EXISTS test.product_variant");
+                stmt.execute("DROP TABLE IF EXISTS test.product");
+                stmt.execute("DROP TABLE IF EXISTS test.spaer_og_rem");
+                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_laengde");
+                stmt.execute("DROP TABLE IF EXISTS test.dimensioner_bredde");
+                stmt.execute("DROP TABLE IF EXISTS test.tag_materiale");
+                stmt.execute("DROP TABLE IF EXISTS test.users");
+                stmt.execute("DROP TABLE IF EXISTS test.orders");
 
-// Create tables as copy of original public schema structure
-                stmt.execute("CREATE TABLE test.orders AS (SELECT * from public.orders) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.users AS (SELECT * from public.users) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.tag_materials AS (SELECT * from public.tag_materiale) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.dimensioner_bredde AS (SELECT * from public.dimensioner_bredde) WITH NO DATA");
-               // stmt.execute("CREATE TABLE test.dimensioner_længde AS (SELECT * from public.dimensioner_længde) WITH NO DATA");
-               // stmt.execute("CREATE TABLE test.spær_og_rem AS (SELECT * from public.spær_og_rem) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.produc AS (SELECT * from public.product) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.product_variant AS (SELECT * from public.product_variant) WITH NO DATA");
-                stmt.execute("CREATE TABLE test.order_item AS (SELECT * from public.order_item) WITH NO DATA");
+// Drop sequences if they exist
+                stmt.execute("DROP SEQUENCE IF EXISTS test.orders_order_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.users_user_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.tag_materiale_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.dimensioner_bredde_bredde_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.dimensioner_laengde_laengde_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.spaer_og_rem_spaer_og_rem_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.product_product_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.product_variant_product_variant_id_seq CASCADE");
+                stmt.execute("DROP SEQUENCE IF EXISTS test.order_item_order_item_id_seq CASCADE");
+
+// Create tables in the test schema as a copy of the public schema structure
+                stmt.execute("CREATE TABLE test.orders AS (SELECT * FROM public.orders) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.users AS (SELECT * FROM public.users) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.tag_materiale AS (SELECT * FROM public.tag_materiale) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.dimensioner_bredde AS (SELECT * FROM public.dimensioner_bredde) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.dimensioner_laengde AS (SELECT * FROM public.dimensioner_laengde) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.spaer_og_rem AS (SELECT * FROM public.spaer_og_rem) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.product AS (SELECT * FROM public.product) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.product_variant AS (SELECT * FROM public.product_variant) WITH NO DATA");
+                stmt.execute("CREATE TABLE test.order_item AS (SELECT * FROM public.order_item) WITH NO DATA");
+
+// Recreate sequences for auto-increment columns
+                stmt.execute("CREATE SEQUENCE test.orders_order_id_seq");
+                stmt.execute("ALTER TABLE test.orders ALTER COLUMN order_id SET DEFAULT nextval('test.orders_order_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.users_user_id_seq");
+                stmt.execute("ALTER TABLE test.users ALTER COLUMN user_id SET DEFAULT nextval('test.users_user_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.tag_materiale_id_seq");
+                stmt.execute("ALTER TABLE test.tag_materiale ALTER COLUMN id SET DEFAULT nextval('test.tag_materiale_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.dimensioner_bredde_bredde_id_seq");
+                stmt.execute("ALTER TABLE test.dimensioner_bredde ALTER COLUMN bredde_id SET DEFAULT nextval('test.dimensioner_bredde_bredde_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.dimensioner_laengde_laengde_id_seq");
+                stmt.execute("ALTER TABLE test.dimensioner_laengde ALTER COLUMN laengde_id SET DEFAULT nextval('test.dimensioner_laengde_laengde_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.spaer_og_rem_spaer_og_rem_id_seq");
+                stmt.execute("ALTER TABLE test.spaer_og_rem ALTER COLUMN spaer_og_rem_id SET DEFAULT nextval('test.spaer_og_rem_spaer_og_rem_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.product_product_id_seq");
+                stmt.execute("ALTER TABLE test.product ALTER COLUMN product_id SET DEFAULT nextval('test.product_product_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.product_variant_product_variant_id_seq");
+                stmt.execute("ALTER TABLE test.product_variant ALTER COLUMN product_variant_id SET DEFAULT nextval('test.product_variant_product_variant_id_seq')");
+                stmt.execute("CREATE SEQUENCE test.order_item_order_item_id_seq");
+                stmt.execute("ALTER TABLE test.order_item ALTER COLUMN order_item_id SET DEFAULT nextval('test.order_item_order_item_id_seq')");
 
             }
         }
@@ -69,39 +98,64 @@ class ProductMapperTest {
         }
 
     }
-/*
+
     @BeforeEach
     void setUp() {
-        try (Connection testConnection = db.connect()) {
-            try (Statement stmt = testConnection.createStatement() ) {
+        try (Connection testConnection = connectionPool.getConnection()) {
+            try (Statement stmt = testConnection.createStatement()) {
                 // Remove all rows from all tables
-                stmt.execute("DELETE FROM test.registration");
-                stmt.execute("DELETE FROM test.team");
-                stmt.execute("DELETE FROM test.sport");
-                stmt.execute("DELETE FROM test.member");
-                stmt.execute("DELETE FROM test.zip");
+                stmt.execute("DELETE FROM test.order_item");
+                stmt.execute("DELETE FROM test.product_variant");
+                stmt.execute("DELETE FROM test.product");
+                stmt.execute("DELETE FROM test.spaer_og_rem");
+                stmt.execute("DELETE FROM test.dimensioner_laengde");
+                stmt.execute("DELETE FROM test.dimensioner_bredde");
+                stmt.execute("DELETE FROM test.tag_materiale");
+                stmt.execute("DELETE FROM test.skur");
+                stmt.execute("DELETE FROM test.users");
+                stmt.execute("DELETE FROM test.orders");
 
-                // Reset the sequence number
-                stmt.execute("SELECT setval('test.member_member_id_seq', 1)");
+                // Reset the sequence numbers
+                stmt.execute("SELECT setval('test.orders_order_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.users_user_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.tag_materiale_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.dimensioner_bredde_bredde_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.dimensioner_laengde_laengde_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.spaer_og_rem_spaer_og_rem_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.product_product_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.product_variant_product_variant_id_seq', 1, false)");
+                stmt.execute("SELECT setval('test.order_item_order_item_id_seq', 1, false)");
 
-                // Insert rows
-                stmt.execute("INSERT INTO test.zip VALUES " +
-                        "(3700, 'Rønne'), (3730, 'Nexø'), (3740, 'Svanneke'), " +
-                        "(3760, 'Gudhjem'), (3770, 'Allinge'), (3782, 'Klemmensker')");
+                // Insert initial rows
+                stmt.execute("INSERT INTO test.dimensioner_bredde (bredde_id, bredde) VALUES " +
+                        "(1, 270), (2, 300), (3, 330), (4, 360), (5, 390), " +
+                        "(6, 420), (7, 450), (8, 480), (9, 510), (10, 540)");
 
-                stmt.execute("INSERT INTO test.member (member_id, name, address, zip, gender, year) VALUES " +
-                        "(1, 'Hans Sørensen', 'Agernvej 3', 3700, 'm', 2000), " +
-                        "(2, 'Jens Kofoed', 'Agrevej 5', 3700, 'm', 2001), " +
-                        "(3, 'Peter Hansen', 'Ahlegårdsvejen 7', 3700, 'm', 2002)");
+                stmt.execute("INSERT INTO test.dimensioner_laengde (laengde_id, laengde) VALUES " +
+                        "(1, 270), (2, 300), (3, 330), (4, 360), (5, 390), " +
+                        "(6, 420), (7, 450), (8, 480), (9, 510), (10, 540)");
 
-                // Set sequence to continue from the largest member_id
-                stmt.execute("SELECT setval('test.member_member_id_seq', COALESCE((SELECT MAX(member_id)+1 FROM test.member), 1), false)");
+                stmt.execute("INSERT INTO test.tag_materiale (id, materiale) VALUES " +
+                        "(1, 'Sunlux 1300K'), (2, 'Sunlux 1200N'), (3, 'Benders sort')");
+
+                stmt.execute("INSERT INTO test.skur (id, skur) VALUES " +
+                        "(1, 'Ja'), (2, 'Nej')");
+
+                stmt.execute("INSERT INTO test.spaer_og_rem (spaer_og_rem_id, materiale) VALUES " +
+                        "(1, 'Benders sort'), (2, 'Benders brun')");
+
+                stmt.execute("INSERT INTO test.users (user_id, username, password, role) VALUES " +
+                        "(1, 'admin', 'password123', 'admin'), (2, 'salesperson', 'sales123', 'sales')");
+
+                stmt.execute("INSERT INTO test.orders (order_id, date_placed, status, bredde, laengde, spaer_og_rem_materiale, tag_materiale, skur, username) VALUES " +
+                        "(1, '2024-01-01', 'placed', 270, 300, 'Benders sort', 'Sunlux 1300K', 'Ja', 'salesperson')");
             }
         } catch (SQLException throwables) {
-            fail("Database connection failed");
+            fail("Database connection failed: " + throwables.getMessage());
         }
     }
 
+/*
     @Test
     void testConnection() throws SQLException {
         assertNotNull(db.connect());
