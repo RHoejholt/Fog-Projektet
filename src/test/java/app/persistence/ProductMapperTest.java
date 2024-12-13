@@ -2,13 +2,16 @@ package app.persistence;
 
 import app.entities.Product;
 import app.exception.DatabaseException;
+import app.exception.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.ProductMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -32,10 +35,8 @@ class ProductMapperTest {
     public static void setUpClass() {
 
         productMapper = new ProductMapper(connectionPool);
-        try (Connection testConnection = connectionPool.getConnection())
-        {
-            try (Statement stmt = testConnection.createStatement())
-            {
+        try (Connection testConnection = connectionPool.getConnection()) {
+            try (Statement stmt = testConnection.createStatement()) {
 // Drop existing tables in the test schema
                 stmt.execute("DROP TABLE IF EXISTS test.order_item");
                 stmt.execute("DROP TABLE IF EXISTS test.product_variant");
@@ -46,6 +47,7 @@ class ProductMapperTest {
                 stmt.execute("DROP TABLE IF EXISTS test.tag_materiale");
                 stmt.execute("DROP TABLE IF EXISTS test.users");
                 stmt.execute("DROP TABLE IF EXISTS test.orders");
+
 
 // Drop sequences if they exist
                 stmt.execute("DROP SEQUENCE IF EXISTS test.orders_order_id_seq CASCADE");
@@ -68,8 +70,8 @@ class ProductMapperTest {
                 stmt.execute("CREATE TABLE test.product AS (SELECT * FROM public.product) WITH NO DATA");
                 stmt.execute("CREATE TABLE test.product_variant AS (SELECT * FROM public.product_variant) WITH NO DATA");
                 stmt.execute("CREATE TABLE test.order_item AS (SELECT * FROM public.order_item) WITH NO DATA");
-
 // Recreate sequences for auto-increment columns
+
                 stmt.execute("CREATE SEQUENCE test.orders_order_id_seq");
                 stmt.execute("ALTER TABLE test.orders ALTER COLUMN order_id SET DEFAULT nextval('test.orders_order_id_seq')");
                 stmt.execute("CREATE SEQUENCE test.users_user_id_seq");
@@ -90,9 +92,7 @@ class ProductMapperTest {
                 stmt.execute("ALTER TABLE test.order_item ALTER COLUMN order_item_id SET DEFAULT nextval('test.order_item_order_item_id_seq')");
 
             }
-        }
-        catch (SQLException throwables)
-        {
+        } catch (SQLException throwables) {
             System.out.println(throwables.getMessage());
             fail("Database connection failed");
         }
@@ -111,7 +111,7 @@ class ProductMapperTest {
                 stmt.execute("DELETE FROM test.dimensioner_laengde");
                 stmt.execute("DELETE FROM test.dimensioner_bredde");
                 stmt.execute("DELETE FROM test.tag_materiale");
-                stmt.execute("DELETE FROM test.skur");
+                // stmt.execute("DELETE FROM test.skur");
                 stmt.execute("DELETE FROM test.users");
                 stmt.execute("DELETE FROM test.orders");
 
@@ -138,8 +138,8 @@ class ProductMapperTest {
                 stmt.execute("INSERT INTO test.tag_materiale (id, materiale) VALUES " +
                         "(1, 'Sunlux 1300K'), (2, 'Sunlux 1200N'), (3, 'Benders sort')");
 
-                stmt.execute("INSERT INTO test.skur (id, skur) VALUES " +
-                        "(1, 'Ja'), (2, 'Nej')");
+                // stmt.execute("INSERT INTO test.skur (id, skur) VALUES " +
+                //       "(1, 'Ja'), (2, 'Nej')");
 
                 stmt.execute("INSERT INTO test.spaer_og_rem (spaer_og_rem_id, materiale) VALUES " +
                         "(1, 'Benders sort'), (2, 'Benders brun')");
@@ -155,49 +155,70 @@ class ProductMapperTest {
         }
     }
 
-/*
     @Test
     void testConnection() throws SQLException {
-        assertNotNull(db.connect());
+        // Ensure a connection is obtained from the pool
+        try (Connection connection = connectionPool.getConnection()) {
+            assertNotNull(connection); // Ensure the connection is not null
+        } catch (SQLException e) {
+            fail("Connection failed: " + e.getMessage());
+        }
+    }
+
+
+    @Test
+    void testTablesAreCreated() throws DatabaseException {
+        try (Connection connection = connectionPool.getConnection()) {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT to_regclass('test.orders');");
+            if (rs.next() && rs.getString(1) != null) {
+                System.out.println("Table exists");
+            } else {
+                System.out.println("Table does not exist");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    /*
+    @Test
+    void getAllProducts() throws DatabaseException {
+        List<Product> products = productMapper.getAllProducts();
+        assertEquals(3, products.size()); // Adjust based on your test data
+        assertEquals(new Product(1, "Product A", 100.0), products.get(0));
+        assertEquals(new Product(2, "Product B", 200.0), products.get(1));
+        assertEquals(new Product(3, "Product C", 300.0), products.get(2));
     }
 
     @Test
-    void getAllMembers() throws DatabaseException {
-        List<Member> members = memberMapper.getAllMembers();
-        assertEquals(3, members.size());
-        assertEquals(members.get(0), new Member(1,"Hans Sørensen", "Agernvej 3",3700, "Rønne","m",2000));
-        assertEquals(members.get(1), new Member(2, "Jens Kofoed","Agrevej 5",3700,"Rønne","m",2001));
-        assertEquals(members.get(2), new Member(3, "Peter Hansen","Ahlegårdsvejen 7",3700,"Rønne","m",2002));
+    void getProductById() throws DatabaseException {
+        assertEquals(new Product(3, "Product C", 300.0), productMapper.getProductById(3));
     }
 
     @Test
-    void getMemberById() throws DatabaseException {
-        assertEquals(new Member(3, "Peter Hansen","Ahlegårdsvejen 7",3700,"Rønne","m",2002), memberMapper.getMemberById(3));
+    void deleteProduct() throws DatabaseException {
+        assertTrue(productMapper.deleteProduct(2));
+        assertEquals(2, productMapper.getAllProducts().size());
     }
 
     @Test
-    void deleteMember() throws DatabaseException {
-        assertTrue(memberMapper.deleteMember(2));
-        assertEquals(2, memberMapper.getAllMembers().size());
+    void insertProduct() throws DatabaseException, IllegalInputException {
+        Product p1 = productMapper.insertProduct(new Product("Product D", 400.0));
+        assertNotNull(p1);
+        assertEquals(4, productMapper.getAllProducts().size());
+        assertEquals(p1, productMapper.getProductById(4));
     }
 
     @Test
-    void insertMember() throws DatabaseException, IllegalInputException {
-        Member m1 = memberMapper.insertMember(new Member("Jon Snow","Wintherfell 3", 3760, "Gudhjem", "m", 1992));
-        assertNotNull(m1);
-        assertEquals(4, memberMapper.getAllMembers().size());
-        assertEquals(m1, memberMapper.getMemberById(4));
-    }
-
-    @Test
-    void updateMember() throws DatabaseException {
-        boolean result = memberMapper.updateMember(new Member(2, "Jens Kofoed","Agrevej 5",3760,"Gudhjem","m",1999));
+    void updateProduct() throws DatabaseException {
+        boolean result = productMapper.updateProduct(new Product(2, "Updated Product B", 250.0));
         assertTrue(result);
-        Member m1 = memberMapper.getMemberById(2);
-        assertEquals(1999,m1.getYear());
-        assertEquals(3, memberMapper.getAllMembers().size());
+        Product p1 = productMapper.getProductById(2);
+        assertEquals(250.0, p1.getPrice(), 0.01);
+        assertEquals(3, productMapper.getAllProducts().size());
     }
+*/
 
- */
 
+    }
 }
