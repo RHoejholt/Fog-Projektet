@@ -33,10 +33,10 @@ public class Calculator {
 
     // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
     public static int calcPillar(int carportLength)  {
-        int quantity = 2 * (2 + (carportLength - MAX_DIST - OVERHANG) / MAX_DIST);
+        int quantity = 2 * (2 + (carportLength*10 - MAX_DIST - OVERHANG) / MAX_DIST);
 
         int extraPillars = 0;
-        if (carportLength >= MAX_PLANK_LENGTH) {
+        if (carportLength*10 > MAX_PLANK_LENGTH) {
             extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
         }
         quantity += extraPillars; // Adds extra pillars if needed
@@ -52,20 +52,12 @@ public class Calculator {
             order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, calcPillar(order.getLength()), "Stolper nedgraves 90cm i jord"));
         }
 
-
-
-
         ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
         if (productVariantBeam != null) {
 
 
             order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, calcBeams(order.getLength()), ""));
         }
-
-
-
-
-
 
         // Fetch the appropriate product variant for rafters
         ProductVariant rafterVariant = ProductMapper.getVariantsByProductIdAndMinLength(RAFTERID, 0);
@@ -81,15 +73,20 @@ public class Calculator {
 
     public static int calcBeams(int carportLength) {
 
-        //TODO: make it do the thing
-        return 0;
+        int quantity = 2;
+        if (carportLength*10 > MAX_PLANK_LENGTH) {
+            quantity += (carportLength*10 - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+        }
+        quantity += quantity; // Adds extra pillars if needed
+
+        return quantity;
     }
 
     // Rafters calculation
     public static int calcRafters(int carportWidth) {
 
         // Calculate the number of rafters based on the separation distance
-        int quantityOfRafters = (carportWidth + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
+        int quantityOfRafters = (carportWidth*10 + RAFTER_SEPARATION_DISTANCE - 1) / RAFTER_SEPARATION_DISTANCE; // Rounding up to include the last rafter
 
         return quantityOfRafters;
     }
