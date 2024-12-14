@@ -1,8 +1,9 @@
 package app.persistence;
 
 import app.entities.Product;
+import app.entities.ProductVariant;
 import app.exception.DatabaseException;
-import app.exception.IllegalInputException;
+//import app.exception.IllegalInputException;
 import app.persistence.ConnectionPool;
 import app.persistence.ProductMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -179,17 +180,16 @@ class ProductMapperTest {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-    /*
-    @Test
-    void getAllProducts() throws DatabaseException {
-        List<Product> products = productMapper.getAllProducts();
-        assertEquals(3, products.size()); // Adjust based on your test data
-        assertEquals(new Product(1, "Product A", 100.0), products.get(0));
-        assertEquals(new Product(2, "Product B", 200.0), products.get(1));
-        assertEquals(new Product(3, "Product C", 300.0), products.get(2));
     }
 
+        @Test
+        void getVariantsByProductIdAndMinLengthTest () throws DatabaseException {
+            ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+            assertNotNull(productVariant);
+            Product product = new Product(1, "Beam", "1", 10);
+            assertEquals(new ProductVariant(1, product, 1), productVariant);
+        }
+ /*
     @Test
     void getProductById() throws DatabaseException {
         assertEquals(new Product(3, "Product C", 300.0), productMapper.getProductById(3));
@@ -221,4 +221,3 @@ class ProductMapperTest {
 
 
     }
-}
