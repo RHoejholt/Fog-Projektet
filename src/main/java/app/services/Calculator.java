@@ -18,7 +18,7 @@ public class Calculator {
     private static final int RAFTERID = 3; //SPÆR
     private static final int BEAMID = 2; //REMME
     private static final int MAX_PLANK_LENGTH = 6000;
-    private static final int maxDistanceBetweenRafters = 550;
+    private static final int maxDistanceBetweenRafters = 505; //55cm, minus the width of the rafter itself
 
     private static ConnectionPool connectionPool;
 
@@ -42,11 +42,9 @@ public class Calculator {
         int quantity = 2 * (2 + (carportLength*10 - OVERHANG) / maxDistanceBetweenPillars);
 
         // Here we check if any beam seams are unsupported, and add a pillar to each side for each unsupported beam seam.
-        int extraPillars = 0;
-        if (carportLength*10 > MAX_PLANK_LENGTH) {
-            extraPillars += (carportLength - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+        if (carportLength*10 > (MAX_PLANK_LENGTH+1250)) {
+            quantity += carportLength / MAX_PLANK_LENGTH;
         }
-        quantity += extraPillars; // Adds extra pillars if needed
 
         return quantity;
     }
@@ -94,7 +92,7 @@ public class Calculator {
     public static int calcRafters(int carportWidth) {
 
         // Calculate the number of rafters based on the separation distance
-        int quantityOfRafters = (carportWidth*10 + maxDistanceBetweenRafters - 1) / maxDistanceBetweenRafters; // Rounding up to include the last rafter
+        int quantityOfRafters = (carportWidth*10 + maxDistanceBetweenRafters) / maxDistanceBetweenRafters; // Rounding up to include the last rafter
 
         return quantityOfRafters;
     }
