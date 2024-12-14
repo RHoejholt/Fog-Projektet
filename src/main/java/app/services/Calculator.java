@@ -18,8 +18,7 @@ public class Calculator {
     private static final int RAFTERID = 3; //SPÆR
     private static final int BEAMID = 2; //REMME
     private static final int MAX_PLANK_LENGTH = 6000;
-    private static final int maxDistanceBetweenRafters = 505; //55cm, minus the width of the rafter itself
-
+    private static final int maxDistanceBetweenRafters = 550;
     private static ConnectionPool connectionPool;
 
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -29,6 +28,33 @@ public class Calculator {
     public Calculator(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
         this.productMapper = new ProductMapper(connectionPool);
+    }
+
+    public void calculateAndAddToOrder(Order order) throws DatabaseException {
+        ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
+
+        if (productVariantPillar != null) {
+
+            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, calcPillar(order.getLength()), "Stolper nedgraves 90cm i jord"));
+        }
+
+        ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(BEAMID, 6000);
+        if (productVariantBeam != null) {
+
+
+            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, calcBeams(order.getLength()), ""));
+        }
+
+        // Fetch the appropriate product variant for rafters
+        ProductVariant rafterVariant = ProductMapper.getVariantsByProductIdAndMinLength(RAFTERID, 0);
+
+        if (rafterVariant == null) {
+            throw new DatabaseException("No suitable rafter variant found for the given minimum length.");
+        }
+
+        // Add rafters as an OrderItem to the order
+        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, calcRafters(order.getWidth()), "Spær til tag"));
+
     }
 
     // Beregn stolper og remme. Bægge beregner sker i denne metode da det ellers bliver noget rod med unit tests.
@@ -49,40 +75,13 @@ public class Calculator {
         return quantity;
     }
 
-    public void calculateAndAddToOrder(Order order) throws DatabaseException {
-        ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
-
-        if (productVariantPillar != null) {
-
-            order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, calcPillar(order.getLength()), "Stolper nedgraves 90cm i jord"));
-        }
-
-        ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
-        if (productVariantBeam != null) {
-
-
-            order.addOrderItem(new OrderItem(BEAMID, order, productVariantBeam, calcBeams(order.getLength()), ""));
-        }
-
-        // Fetch the appropriate product variant for rafters
-        ProductVariant rafterVariant = ProductMapper.getVariantsByProductIdAndMinLength(RAFTERID, 0);
-
-        if (rafterVariant == null) {
-            throw new DatabaseException("No suitable rafter variant found for the given minimum length.");
-        }
-
-        // Add rafters as an OrderItem to the order
-        order.addOrderItem(new OrderItem(RAFTERID, order, rafterVariant, calcRafters(order.getWidth()), "Spær til tag"));
-
-    }
-
     // Beams calculation (Remme)
     //This does not need a "seperation distance", since the beams do not lay in parallel, but in extension of each other
     public static int calcBeams(int carportLength) {
 
         int quantity = 2;
         if (carportLength*10 > MAX_PLANK_LENGTH) {
-            quantity += (carportLength*10 - MAX_PLANK_LENGTH) / MAX_PLANK_LENGTH;
+            quantity += 2 * (carportLength*10) / MAX_PLANK_LENGTH;
         }
 
         return quantity;
@@ -92,9 +91,11 @@ public class Calculator {
     public static int calcRafters(int carportWidth) {
 
         // Calculate the number of rafters based on the separation distance
-        int quantityOfRafters = (carportWidth*10 + maxDistanceBetweenRafters) / maxDistanceBetweenRafters; // Rounding up to include the last rafter
-
-        return quantityOfRafters;
+        // Rounding up to include the last rafter
+        if(carportWidth*10 % maxDistanceBetweenPillars != 0){
+            return 1 + (carportWidth*10) / maxDistanceBetweenRafters;
+        }
+        return (carportWidth*10) / maxDistanceBetweenRafters;
     }
 
 }

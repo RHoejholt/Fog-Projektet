@@ -10,19 +10,19 @@ class CalculatorTest {
     @Test
     void calcPillarTest() {
         int result = Calculator.calcPillar(700);
-        assertEquals(2, result);
+        assertEquals(6, result);
     }
 
     @Test
     void calcBeamTest()  {
         int result = Calculator.calcBeams(700);
-        assertEquals(2, result);
+        assertEquals(4, result);
     }
 
     @Test
     void calcRaftersTest() {
         int result = Calculator.calcRafters(600);
-        assertEquals(2, result);
+        assertEquals(11, result);
     }
 
 }
