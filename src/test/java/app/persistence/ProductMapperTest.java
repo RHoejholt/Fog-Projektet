@@ -182,42 +182,52 @@ class ProductMapperTest {
         }
     }
 
-        @Test
-        void getVariantsByProductIdAndMinLengthTest () throws DatabaseException {
-            ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
-            assertNotNull(productVariant);
-            Product product = new Product(1, "Beam", "1", 10);
-            assertEquals(new ProductVariant(1, product, 1), productVariant);
-        }
- /*
     @Test
-    void getProductById() throws DatabaseException {
-        assertEquals(new Product(3, "Product C", 300.0), productMapper.getProductById(3));
+    void getVariantsByProductIdAndMinLengthTest1() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
     }
 
     @Test
-    void deleteProduct() throws DatabaseException {
-        assertTrue(productMapper.deleteProduct(2));
-        assertEquals(2, productMapper.getAllProducts().size());
+    void getVariantsByProductIdAndMinLengthTest2() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
     }
 
     @Test
-    void insertProduct() throws DatabaseException, IllegalInputException {
-        Product p1 = productMapper.insertProduct(new Product("Product D", 400.0));
-        assertNotNull(p1);
-        assertEquals(4, productMapper.getAllProducts().size());
-        assertEquals(p1, productMapper.getProductById(4));
+    void getVariantsByProductIdAndMinLengthTest3() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
     }
 
     @Test
-    void updateProduct() throws DatabaseException {
-        boolean result = productMapper.updateProduct(new Product(2, "Updated Product B", 250.0));
-        assertTrue(result);
-        Product p1 = productMapper.getProductById(2);
-        assertEquals(250.0, p1.getPrice(), 0.01);
-        assertEquals(3, productMapper.getAllProducts().size());
+    void getVariantsByProductIdAndMinLengthTest4() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
     }
-*/
 
-
+    @Test
+    void getVariantsByProductIdAndMinLengthTest5() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
     }
+
+    @Test
+    void getVariantsByProductIdAndMinLengthTest6() throws DatabaseException {
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        assertNotNull(productVariant);
+        Product product = new Product(1, "Beam", "1", 10);
+        assertEquals(new ProductVariant(1, product, 1), productVariant);
+    }
+
+}
