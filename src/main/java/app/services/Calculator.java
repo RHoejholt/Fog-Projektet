@@ -81,7 +81,8 @@ public class Calculator {
 
         int quantity = 2;
         if (carportLength*10 > MAX_PLANK_LENGTH) {
-            quantity += 2 * (carportLength*10) / MAX_PLANK_LENGTH;
+            //Casting not redundant as it helps roudn down before multiplication
+            quantity += 2 * (int)((carportLength*10) / MAX_PLANK_LENGTH);
         }
 
         return quantity;
