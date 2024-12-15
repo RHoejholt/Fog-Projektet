@@ -7,11 +7,11 @@ public class Order {
 
     private int length;
     private int width;
-    private int status;
+    private String status;
     private int orderId;
     private ArrayList<OrderItem> orderItems = new ArrayList<>();
 
-    public Order(int width, int id, int length, int status) {
+    public Order(int width, int id, int length, String status) {
         this.width = width;
         this.orderId = id;
         this.length = length;
@@ -38,6 +38,10 @@ public class Order {
 
     public int getOrderId() {
         return orderId;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public ArrayList<OrderItem> getOrderItems() {

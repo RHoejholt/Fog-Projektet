@@ -3,6 +3,7 @@ package app;
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controller.CarportController;
+import app.controller.OrderController;
 import app.controller.UserController;
 import app.entities.Order;
 import app.persistence.ConnectionPool;
@@ -32,5 +33,6 @@ public class Main {
         app.get("/", ctx -> ctx.render("index.html"));
         UserController.addRoutes(app,connectionPool);
         CarportController.addRoutes(app,connectionPool);
+        OrderController.addRoutes(app, connectionPool);
     }
 }

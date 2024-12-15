@@ -94,10 +94,11 @@ public class CarportController {
             }
 
             // Send data to database
-            CarportMapper.submitFormToDatabase(bredde, laengde, tagMateriale, skur, spaerOgRem, userId, tag_type, dbConnection);
+            int id = CarportMapper.submitFormToDatabase(bredde, laengde, tagMateriale, skur, spaerOgRem, userId, tag_type, dbConnection);
 
             // Success message
-            ctx.attribute("message", "Tak for din ordre. En besked er nu sendt til sælgeren og du vil blive kontaktet snarest. Husk at tjekke din email og spam folder");
+            ctx.attribute("new_order_id", id);
+            ctx.attribute("message", "Tak for din ordre. En besked er nu sendt til sælgeren og du vil blive kontaktet snarest. Husk at tjekke din email og spam folder. Order Id: " + id);
         } catch (DatabaseException e) {
             ctx.attribute("message", "Fejl: " + e.getMessage());
         }

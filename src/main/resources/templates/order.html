@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Din stykliste:</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Include the navbar fragment -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+
+<div class="container">
+    <h1>Ordre detaljer</h1>
+    <p><strong>Ordre ID:</strong> <span th:text="${order.getOrderId}"></span></p>
+    <p><strong>Bredde:</strong> <span th:text="${order.getWidth}"></span> cm</p>
+    <p><strong>Længde:</strong> <span th:text="${order.getLength}"></span> cm</p>
+    <p><strong>Status:</strong> <span th:text="${order.getStatus}"></span></p>
+
+    <h2>Ordre Liste</h2>
+    <ul>
+       <!-- TODO: add the correct getters -->
+        <li th:each="item : ${order.orderItems}">
+            <p><strong>Navn:</strong> <span th:text="${item.name}"></span></p>
+            <p><strong>Antal:</strong> <span th:text="${item.quantity}"></span></p>
+            <p><strong>Beskrivelse:</strong> <span th:text="${item.description}"></span></p>
+        </li>
+    </ul>
+<!-- Fake error?? (( it works ))-->
+    <p th:if="${order.orderItems.empty}" th:text="'Ingen elementer i ordren.'"></p>
+</div>
+
+
+</body>
+</html>
