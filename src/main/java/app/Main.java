@@ -4,7 +4,9 @@ import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
 import app.controller.CarportController;
 import app.controller.UserController;
+import app.entities.Order;
 import app.persistence.ConnectionPool;
+import app.services.Calculator;
 import io.javalin.Javalin;
 import io.javalin.rendering.template.JavalinThymeleaf;
 
@@ -12,7 +14,7 @@ public class Main {
     private static final String USER = "postgres";
     private static final String PASSWORD = "postgres";
     private static final String URL = "jdbc:postgresql://localhost:5432/%s?currentSchema=public";
-    private static final String DB = "fog";
+    private static final String DB = "postgres";
 
     private static final ConnectionPool connectionPool = ConnectionPool.getInstance(USER, PASSWORD, URL, DB);
 
