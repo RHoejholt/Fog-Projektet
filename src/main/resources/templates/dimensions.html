@@ -76,5 +76,10 @@
 <div th:if="${#ctx.message!=null}" th:text="${#ctx.message}" class="alert" role="alert">
     Fejlbeskeder
 </div>
+
+<div th:if="${#ctx.new_order_id != null}">
+    <a th:href="@{'/order?id=' + ${#ctx.new_order_id}}" th:text="'Order ID: ' + ${#ctx.new_order_id}"></a>
+</div>
+
 </body>
 </html>

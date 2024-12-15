@@ -25,38 +25,7 @@ public class ProductMapper {
         this.connectionPool = connectionPool;
     }
 
-/*
-    public List<ProductVariant> getVariantsByProductIdAndMinLength(int minLength, int productId, ConnectionPool connectionPool) throws DatabaseException {
-    //hent korresponderene ting fra database
-        List<ProductVariant> listOfMatches = new ArrayList<>();
-       // listOfMatches.add();
-    return listOfMatches;
-    }
 
-    public static ProductVariant getVariantsByProductIdAndMinLength(int productId, int minLength) throws DatabaseException {
-        String sql = "SELECT * FROM product_variant WHERE product_id=? ORDER BY length ASC";
-        try (Connection connection = connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, productId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                int length = rs.getInt("length");
-                if (length >= minLength) {
-                    int productVariantId = rs.getInt("product_variant_id");
-                    ProductVariant productVariant = new ProductVariant(productVariantId, ((insert product here)) ,length);
-                    return productVariant;
-
-                }
-
-            }
-            return null; //no matching length
-
-        } catch (SQLException e) {
-            throw new DatabaseException(e.getMessage());
-        }
-    }
-
- */
 
     public static ProductVariant getVariantsByProductIdAndMinLength(int productId, int minLength) throws DatabaseException {
         String sql = """
