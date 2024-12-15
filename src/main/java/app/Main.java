@@ -2,6 +2,7 @@ package app;
 
 import app.config.SessionConfig;
 import app.config.ThymeleafConfig;
+import app.controller.CarportController;
 import app.controller.UserController;
 import app.entities.Order;
 import app.persistence.ConnectionPool;
@@ -30,15 +31,6 @@ public class Main {
         // Routing
         app.get("/", ctx -> ctx.render("index.html"));
         UserController.addRoutes(app,connectionPool);
-
-
-        try {
-            Order order = new Order(10, 1, 500, 1);
-
-            Calculator calculator = new Calculator(connectionPool);
-            calculator.calculateAndAddToOrder(order);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        CarportController.addRoutes(app,connectionPool);
     }
 }

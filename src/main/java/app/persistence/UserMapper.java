@@ -10,12 +10,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserMapper {
-    public static void createUser(String username, String password, ConnectionPool pool) throws DatabaseException {
+    public static void createUser(String username, String password, ConnectionPool dbConnection) throws DatabaseException {
         String sql = "insert into users (username, password, role) VALUES (?,?,?);";
         //Hashing and salting passwords for security.
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
-        try (Connection connection = pool.getConnection()) {
+        try (Connection connection = dbConnection.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, hashedPassword);
@@ -30,9 +30,9 @@ public class UserMapper {
         }
     }
 
-    public static User login(String username, String password, ConnectionPool connectionPool) throws DatabaseException {
+    public static User login(String username, String password, ConnectionPool pool) throws DatabaseException {
         String sql = "SELECT * FROM users WHERE username=?";
-        try (Connection connection = connectionPool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection connection = pool.getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
 
