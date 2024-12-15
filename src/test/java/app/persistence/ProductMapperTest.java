@@ -179,17 +179,13 @@ class ProductMapperTest {
 
 
     @Test
-    void testTablesAreCreated() throws DatabaseException {
+    void testTablesAreCreated() throws SQLException {
         try (Connection connection = connectionPool.getConnection()) {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT to_regclass('test.orders');");
-            if (rs.next() && rs.getString(1) != null) {
-                System.out.println("Table exists");
-            } else {
-                System.out.println("Table does not exist");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            assertTrue(rs.next());
+            assertNotNull(rs.getString(1));
+
         }
     }
 
