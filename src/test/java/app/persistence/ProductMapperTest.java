@@ -20,7 +20,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 //Intergration tests
-//@Disabled
 class ProductMapperTest {
 
     private static final String USER = "postgres";
@@ -150,6 +149,18 @@ class ProductMapperTest {
 
                 stmt.execute("INSERT INTO test.orders (order_id, date_placed, status, bredde, laengde, spaer_og_rem_materiale, tag_materiale, skur, username) VALUES " +
                         "(1, '2024-01-01', 'placed', 270, 300, 'Benders sort', 'Sunlux 1300K', 'Ja', 'salesperson')");
+
+                stmt.execute("INSERT INTO test.product (product_id, name, unit, price) VALUES" +
+                        "(1, 'Beam', 1, 10)");
+
+
+                stmt.execute("INSERT INTO test.product_variant (product_variant_id, product_id, length) VALUES" +
+                        "(1, 1, 600)");
+
+                stmt.execute("INSERT INTO test.product_variant (product_variant_id, product_id, length) VALUES" +
+                        "(2, 1, 780)");
+
+
             }
         } catch (SQLException throwables) {
             fail("Database connection failed: " + throwables.getMessage());
@@ -186,48 +197,23 @@ class ProductMapperTest {
     void getVariantsByProductIdAndMinLengthTest1() throws DatabaseException {
         ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
         assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
+        assertEquals(600, productVariant.getLength());
+        assertEquals(1, productVariant.getProductId());
     }
 
     @Test
     void getVariantsByProductIdAndMinLengthTest2() throws DatabaseException {
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
-        assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1800);
+        assertNull(productVariant);
     }
 
     @Test
     void getVariantsByProductIdAndMinLengthTest3() throws DatabaseException {
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
+        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 650);
         assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
+        assertEquals(780, productVariant.getLength());
+        assertEquals(1, productVariant.getProductId());
     }
 
-    @Test
-    void getVariantsByProductIdAndMinLengthTest4() throws DatabaseException {
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
-        assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
-    }
-
-    @Test
-    void getVariantsByProductIdAndMinLengthTest5() throws DatabaseException {
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
-        assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
-    }
-
-    @Test
-    void getVariantsByProductIdAndMinLengthTest6() throws DatabaseException {
-        ProductVariant productVariant = ProductMapper.getVariantsByProductIdAndMinLength(1, 1);
-        assertNotNull(productVariant);
-        Product product = new Product(1, "Beam", "1", 10);
-        assertEquals(new ProductVariant(1, product, 1), productVariant);
-    }
 
 }
