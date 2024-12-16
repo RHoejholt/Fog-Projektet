@@ -25,8 +25,7 @@ public class OrderController {
         //TODO: Check the order belongs to the active user
         Order order = OrderMapper.getOrderById(id, dbConnection);
         ctx.attribute("order", order);
-        //TODO: Add variants and product to sql
-       // calcItemList(order, dbConnection);
+        calcItemList(order, dbConnection);
         ctx.render("order.html");
     }
 

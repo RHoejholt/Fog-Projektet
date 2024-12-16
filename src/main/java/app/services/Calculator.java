@@ -31,14 +31,14 @@ public class Calculator {
     }
 
     public void calculateAndAddToOrder(Order order) throws DatabaseException {
-        ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 6000);
+        ProductVariant productVariantPillar = ProductMapper.getVariantsByProductIdAndMinLength(PILLARID, 0);
 
         if (productVariantPillar != null) {
 
             order.addOrderItem(new OrderItem(PILLARID, order, productVariantPillar, calcPillar(order.getLength()), "Stolper nedgraves 90cm i jord"));
         }
 
-        ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(BEAMID, 6000);
+        ProductVariant productVariantBeam = ProductMapper.getVariantsByProductIdAndMinLength(BEAMID, 0);
         if (productVariantBeam != null) {
 
 

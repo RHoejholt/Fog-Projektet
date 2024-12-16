@@ -36,6 +36,15 @@ public class OrderItem {
         return description;
     }
 
+    public String getProductName() {
+        return productVariant.getProduct().getProductName();
+    }
+
+    public int getProductLength() {
+        return productVariant.getLength();
+    }
+
+
 
     @Override
     public String toString() {

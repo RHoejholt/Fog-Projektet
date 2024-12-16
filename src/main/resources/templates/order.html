@@ -5,12 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Din stykliste:</title>
     <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
+    <style>
+        /* Inline styles for centering the table */
+        .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            text-align: left;
+            margin: 0 auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center; /* Center text in cells */
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
 
 <!-- Include the navbar fragment -->
 <div th:replace="~{navbar :: navbar}"></div>
-
 
 <div class="container">
     <h1>Ordre detaljer</h1>
@@ -20,18 +42,31 @@
     <p><strong>Status:</strong> <span th:text="${order.getStatus}"></span></p>
 
     <h2>Ordre Liste</h2>
-    <ul>
-       <!-- TODO: add the correct getters -->
-        <li th:each="item : ${order.orderItems}">
-            <p><strong>Navn:</strong> <span th:text="${item.name}"></span></p>
-            <p><strong>Antal:</strong> <span th:text="${item.quantity}"></span></p>
-            <p><strong>Beskrivelse:</strong> <span th:text="${item.description}"></span></p>
-        </li>
-    </ul>
-<!-- Fake error?? (( it works ))-->
+
+    <!-- Center the table using a container -->
+    <div class="center-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Antal</th>
+                <th>Længde (cm)</th>
+                <th>Beskrivelse</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${order.orderItems}">
+                <td th:text="${item.productName}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${item.productLength}"></td>
+                <td th:text="${item.description}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <p th:if="${order.orderItems.empty}" th:text="'Ingen elementer i ordren.'"></p>
 </div>
-
 
 </body>
 </html>

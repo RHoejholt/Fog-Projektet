@@ -2,6 +2,7 @@ package app.services;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 //Rapport: Unit tests do not depend on any database, tests simple input and output of methods. This ensures the calculations have fewer sources of error
@@ -45,40 +46,39 @@ class CalculatorTest {
     }
 
 
-
     @Test
-    void calcBeamTest1()  {
+    void calcBeamTest1() {
         int result = Calculator.calcBeams(240);
         assertEquals(2, result);
     }
 
     @Test
-    void calcBeamTest2()  {
+    void calcBeamTest2() {
         int result = Calculator.calcBeams(360);
         assertEquals(2, result);
     }
 
     @Test
-    void calcBeamTest3()  {
+    void calcBeamTest3() {
         int result = Calculator.calcBeams(570);
         assertEquals(2, result);
     }
 
     @Test
-    void calcBeamTest4()  {
+    void calcBeamTest4() {
         int result = Calculator.calcBeams(700);
         assertEquals(4, result);
     }
 
     @Test
-    void calcBeamTest5()  {
+    void calcBeamTest5() {
         int result = Calculator.calcBeams(780);
         assertEquals(4, result);
     }
 
 
     @Test
-    void calcBeamTest6()  {
+    void calcBeamTest6() {
         int result = Calculator.calcBeams(1000);
         assertEquals(4, result);
     }
@@ -88,21 +88,25 @@ class CalculatorTest {
         int result = Calculator.calcRafters(240);
         assertEquals(5, result);
     }
+
     @Test
     void calcRaftersTest2() {
         int result = Calculator.calcRafters(330);
         assertEquals(7, result);
     }
+
     @Test
     void calcRaftersTest3() {
         int result = Calculator.calcRafters(420);
         assertEquals(8, result);
     }
+
     @Test
     void calcRaftersTest4() {
         int result = Calculator.calcRafters(510);
         assertEquals(10, result);
     }
+
     @Test
     void calcRaftersTest5() {
         int result = Calculator.calcRafters(600);
