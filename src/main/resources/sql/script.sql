@@ -1,5 +1,7 @@
 BEGIN;
 
+CREATE SCHEMA test;
+
 CREATE TABLE IF NOT EXISTS public.dimensioner_bredde
 (
     bredde_id serial NOT NULL,
