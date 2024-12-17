@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Carport Dimensions</title>
+    <link href="../public/css/css.css" th:href="@{/css/css.css}" rel="stylesheet"/>
+    <style>
+        /* Added inline CSS for demonstration. Move to your css.css file for production. */
+        .order-id-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .order-id-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF; /* Bootstrap blue */
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .order-id-button:hover {
+            background-color: #0056b3; /* Darker blue */
+            transform: scale(1.05);
+        }
+
+        .order-id-button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Include the navbar fragment -->
+<div th:replace="~{navbar :: navbar}"></div>
+
+<!-- Form to submit selected dimensions -->
+<div class="container">
+    <form action="/dimensions" method="POST">
+        <!-- Dropdown for Bredde -->
+        <label for="bredde">Bredde:</label>
+        <select name="bredde" id="bredde">
+            <option value="" disabled selected>Vælg en bredde</option>
+            <th:block th:each="bredde : ${breddeOptions}">
+                <option th:value="${bredde}" th:text="${bredde}"></option>
+            </th:block>
+        </select>
+        <br><br>
+
+        <!-- Dropdown for Længde -->
+        <label for="laengde">Længde:</label>
+        <select name="laengde" id="laengde">
+            <option value="" disabled selected>Vælg en længde</option>
+            <th:block th:each="laengde : ${laengdeOptions}">
+                <option th:value="${laengde}" th:text="${laengde}"></option>
+            </th:block>
+        </select>
+        <br><br>
+
+        <!-- Dropdown for Tag Materiale -->
+        <label for="tagMateriale">Tag Materiale:</label>
+        <select name="tagMateriale" id="tagMateriale">
+            <option value="" disabled selected>Vælg materiale</option>
+            <th:block th:each="materiale : ${tagMaterialeOptions}">
+                <option th:value="${materiale}" th:text="${materiale}"></option>
+            </th:block>
+        </select>
+        <br><br>
+
+        <!-- Dropdown for Skur -->
+        <label for="skur">Skur:</label>
+        <select name="skur" id="skur">
+            <option value="" disabled selected>Vælg et skur</option>
+            <th:block th:each="skur : ${skurOptions}">
+                <option th:value="${skur}" th:text="${skur}"></option>
+            </th:block>
+        </select>
+        <br><br>
+
+        <!-- Dropdown for Spær og Rem -->
+        <label for="spaer_og_rem">Spær og Rem:</label>
+        <select name="spaer_og_rem" id="spaer_og_rem" required>
+            <option value="" disabled selected>Vælg materiale</option>
+            <th:block th:each="materiale : ${spaerOgRemOptions}">
+                <option th:value="${materiale}" th:text="${materiale}"></option>
+            </th:block>
+        </select>
+        <br><br>
+
+        <!-- Hidden input to include tag_type -->
+        <input type="hidden" name="tag_type" th:value="${tag_type}" />
+
+        <!-- Submit button -->
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<!-- Display error or success message -->
+<div th:if="${#ctx.message != null}" th:text="${#ctx.message}" class="alert" role="alert">
+    Fejlbeskeder
+</div>
+
+<!-- Order ID button -->
+<div th:if="${#ctx.new_order_id != null}" class="order-id-container">
+    <a class="order-id-button" th:href="@{'/order?id=' + ${#ctx.new_order_id}}"
+       th:text="'Order ID: ' + ${#ctx.new_order_id}"></a>
+</div>
+
+</body>
+</html>

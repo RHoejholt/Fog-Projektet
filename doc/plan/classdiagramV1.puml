@@ -1,0 +1,198 @@
+@startuml
+
+Title Fog Carports
+
+scale 1
+package services {
+    class Calculator {
+        - static int overhang
+        - static int maxDist
+        - static int extraPillars
+        - static final int PILLARID
+        - static final int RAFTERID
+        - static final int BEAMSID
+        - static List<OrderItem> orderItems
+        - static int width
+        - static int length
+        - ConnectionPool connectionPool
+        - static int maxPlankLength
+        - static int raftersSeperationDistance
+
+        + Calculator(int width, int length)
+        + void calcCarport(Order order) throws DatabaseException
+        + static void calcPillar(Order order)
+        + void calcRafters(Order order)
+        + void calcBeams(Order order)
+    }
+
+package entities{
+class Carport {
+    - int carportId
+    - double width
+    - double length
+    - double height
+    - String roofMaterial
+    - int roofPitch
+    - boolean hasShed
+    + Carport(int, double, double, double, String, int, boolean)
+    + int getCarportId()
+    + double getWidth()
+    + double getLength()
+    + double getHeight()
+    + String getRoofMaterial()
+    + int getRoofPitch()
+    + boolean hasShed()
+}
+
+class Shed {
+    private int orderItemId;
+    private Order order;
+    private ProductVariant productVariant;
+    private int quantity;
+    private String description;
+    + Shed(int, double, double, String, String)
+    + int getShedId()
+    + double getWidth()
+    + double getDepth()
+    + String getCladding()
+    + String getFloorType()
+}
+
+class OrderItem {
+    -int orderItemId;
+    -Order order;
+    -ProductVariant productVariant;
+    -int quantity;
+    -String description;
+    + int getOrderItemId()
+    +Order getOrder()
+    + ProductVariant getProductVariant()
+    + int getQuantity()
+    + String getDescription()
+
+}
+
+class Order {
+    - int orderId
+    - Timestamp orderDate
+    - BigDecimal totalPrice
+    + Orders(int, Timestamp, BigDecimal)
+    + int getOrderId()
+    + Timestamp getOrderDate()
+    + BigDecimal getTotalPrice()
+}
+
+class User {
+    -int userId
+    -String username
+    -String role
+    + int getUserId()
+    + String getUsername()
+    + String getRole()
+    + boolean isAdmin()
+    + String toString()
+
+}
+
+
+}
+
+package Persistence{
+class ConnectionPool {
+    - static ConnectionPool instance
+    - static HikariDataSource ds
+    + static ConnectionPool getInstance(String, String, String, String)
+    + synchronized Connection getConnection()
+    + synchronized void close()
+}
+
+class CarportMapper {
+    + static Carport getCarportById(int, ConnectionPool) throws DatabaseException
+    + static void createCarport(double, double, double, String, int, boolean, ConnectionPool) throws DatabaseException
+}
+
+class ShedMapper {
+    + static Shed getShedById(int, ConnectionPool) throws DatabaseException
+    + static void createShed(double, double, String, String, ConnectionPool) throws DatabaseException
+}
+
+class OrderlineMapper {
+    + static List<Orderline> getAllOrderlinesPerOrder(int, ConnectionPool) throws DatabaseException
+}
+
+class OrdersMapper {
+    + static List<Orders> getAllOrders(ConnectionPool) throws DatabaseException
+    + static void createNewOrder(Timestamp, List<Orderline>, BigDecimal, ConnectionPool) throws DatabaseException
+
+}
+
+class UserMapper {
+    + static void createUser(String username, String password, ConnectionPool pool) throws DatabaseException
+    + static User login(String username, String password, ConnectionPool connectionPool) throws DatabaseException
+}
+
+}
+
+package controllers{
+class OrderController {
+    + static void getAllOrders(Context, ConnectionPool)
+    + static void addRoutes(Javalin, ConnectionPool)
+}
+
+class CarportController {
+    + static void getCarportById(Context, ConnectionPool)
+    + static void createCarport(Context, ConnectionPool)
+    + static void addRoutes(Javalin, ConnectionPool)
+}
+
+class ShedController {
+    + static void getShedById(Context, ConnectionPool)
+    + static void createShed(Context, ConnectionPool)
+    + static void addRoutes(Javalin, ConnectionPool)
+}
+
+class UserController {
+    + static void addRoutes(Javalin app, ConnectionPool dbConnection)
+    - static void createUser(Context ctx, ConnectionPool dbConnection)
+    -  static boolean passwordCheck(Context ctx, String password, String confirmPassword)
+    + static void doLogin(Context ctx, ConnectionPool dbConnection)
+    + static void doLogout(Context ctx, ConnectionPool dbConnection)
+}
+
+
+
+}
+
+class Main {
+    - static final String USER
+    - static final String PASSWORD
+    - static final String URL
+    - static final String DB
+    - static final ConnectionPool connectionPool
+    + static void main(String[])
+}
+
+package Exceptions{
+class DatabaseException {
+    + DatabaseException(String)
+    + DatabaseException(String, String)
+}
+}
+
+Order "1" *-- "*" OrderItem : contains
+OrderItem "*" *-- "1" Carport : links to
+OrderItem "*" *-- "1" Shed : links to
+Carport "1" *-- "1" Shed : may include
+ConnectionPool -- CarportMapper : provides connections
+ConnectionPool -- ShedMapper : provides connections
+ConnectionPool -- OrderlineMapper : provides connections
+ConnectionPool -- OrdersMapper : provides connections
+CarportMapper -- Carport : maps
+ShedMapper -- Shed : maps
+OrderlineMapper -- OrderItem : maps
+OrdersMapper -- Order : maps
+OrderController -- OrdersMapper : interacts with
+CarportController -- CarportMapper : interacts with
+ShedController -- ShedMapper : interacts with
+
+@enduml

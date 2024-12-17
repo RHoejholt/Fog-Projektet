@@ -1,0 +1,181 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #00548f;
+    padding: 10px;
+}
+
+.logo {
+    height: 50px;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 1em;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.button {
+    background-color: #00548f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    width: 150px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button img {
+    display: block;
+    margin: 0 auto 10px;
+    width: 50px;
+    height: 50px;
+}
+
+.button span {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+.alert {
+    padding: 10px;
+    margin: 20px 0;
+    border-radius: 5px;
+    background-color: #ffcc00; /* Yellow background for warning */
+    color: #333; /* Dark text for contrast */
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+}
+
+.navbar {
+    background-color: #154985; /* Background color of the navbar */
+    height: 100px; /* Height of the navbar */
+    display: flex;
+    justify-content: space-between; /* Space out the left and right sections */
+    align-items: center; /* Center items vertically */
+    padding: 0 20px;
+}
+
+.navbar-content {
+    display: flex;
+    width: 100%; /* Make the navbar content fill the entire width */
+    justify-content: space-between; /* Space out the left and right sections */
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center; /* Vertically center content */
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center; /* Vertically center content */
+}
+
+.navbar-logo-link {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.navbar-logo {
+    height: 100px; /* Adjust logo size */
+    width: auto; /* Maintain aspect ratio */
+}
+
+.navbar-nav {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    margin-left: 20px; /* Space between items */
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+}
+
+.nav-link:hover {
+    background-color: #006F9C; /* Background color on hover */
+    border-radius: 5px;
+}
+
+.navbar-left {
+    margin-right: auto; /* Push the left section to the left */
+}
+
+.navbar-right {
+    margin-left: auto; /* Push the right section to the right */
+}
+
+
+.order-id-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.order-id-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    background-color: #007BFF; /* Bootstrap blue */
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.order-id-button:hover {
+    background-color: #0056b3; /* Darker blue */
+    transform: scale(1.05);
+}
+
+.order-id-button:active {
+    transform: scale(0.98);
+}
+
+
+
+
