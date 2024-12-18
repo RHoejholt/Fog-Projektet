@@ -1,0 +1,46 @@
+@startuml
+title Fog Carports Domænemodel
+
+class Kunde {
+    kundeId
+    email
+
+}
+
+class Order {
+    bredde
+    længde
+    højde
+    tagmateriale
+    taghældning
+    skur (ja/nej)
+}
+
+class Produkt {
+    produktId
+    navn
+    enhed
+    pris
+}
+
+
+class Stykliste {
+    totalpris
+    tegning (SVG)
+    genereringsdato
+}
+
+class Sælger {
+    sælgerId
+    navn
+    email
+}
+
+Kunde "1" -- "*" Order : afgiver
+Stykliste "1" -- "*" Produkt : indeholder
+
+Order "1" -- "1" Stykliste : indeholder
+
+Sælger "1" -- "*" Stykliste : modtager
+
+@enduml
