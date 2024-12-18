@@ -3,19 +3,33 @@ Semesterprojekt Lukas og Rasmus HS
 
 Fog-Projektet er et Java-baseret system udviklet til at designe og generere tilpassede carporte og tilhørende materialelister til DIY-kunder. Projektet understøtter salgspersonale ved at generere SVG-tegninger og en detaljeret materialeliste.
 
+----------------------------------
+
 Sådan køres projektet
+
 1: Opsætning af database:
+
   1a: Installér docker desktop, og pgadmin container version.
+  
   1b: Tilpas din docker-compose.yml fil til dit system
+  
   1c: Åbn git bash I samme folder som din docker-compose.yml fil, og skriv "docker compose up -d"
+  
   1d: Tilgå pgadmin via localhost med port og loginoplysninger du angav i docker-compose.yml, opret en server med en database, med et schema "public.", og kør script.sql på det schema
   
+  
 2: Kørsel af java app:
+
   2a: Clon dette repository og åbn det i din foretrukne IDE
+  
   2b: Tilpas din conncetion pool i main klassen til at tilsvare din docker-compose.yml fil
+  
   3c: Start applikationen ved at køre main metoden i main-klassen
+  
   4d: Åbn en browser og gå til http://localhost:3484 (eller den port du har angivet på linje 30 i main klassen).
 
+----------------------------------
+  
 Mappestruktur: 
 
 Fog-Projektet/
@@ -70,5 +84,6 @@ Fog-Projektet/
 
 └── .gitignore            # Git ignore-fil
 
+----------------------------------
 
 For mere information, læs venligst den fulde rapport. 
