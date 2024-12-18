@@ -19,30 +19,56 @@ Sådan køres projektet
 Mappestruktur: 
 
 Fog-Projektet/
+
 │
+
 ├── doc/                 # Planlægningsfiler og diagrammer
+
 │   ├── plan/            # Class og domain modeller (PlantUML)
-│   └── docs/            # ERD og andre dokumenter
+
+│   └── docs/            # ERD og andre diagrammer
+
 │
+
 ├── src/
+
 │   ├── main/
+
 │   │   ├── java/        # Java-kode
+
 │   │   │   ├── app/
+
 │   │   │       ├── config/        # Konfigurationsklasser
+
 │   │   │       ├── controller/    # Controller-lag (HTTP-håndtering)
+
 │   │   │       ├── entities/      # Entity-klasser (Domænemodeller)
+
 │   │   │       ├── exception/     # Fejlhåndtering
+
 │   │   │       ├── persistence/   # Databaseadgang (DAOs)
+
 │   │   │       ├── services/      # Service-lag (Forretningslogik)
+
 │   │   │       └── Main           # Hovedapplikationen
+
 │   │   ├── resources/
+
 │   │       ├── public/    # Frontendfiler (CSS, billeder)
+
 │   │       ├── sql/       # SQL-scripts
+
 │   │       └── templates/ # Thymeleaf HTML-skabeloner
+
 │   │
+
 │   ├── test/             # Testkode
+
 │       ├── java/         # JUnit-tests til persistence og services
+
 │
+
 └── .gitignore            # Git ignore-fil
+
 
 For mere information, læs venligst den fulde rapport. 
