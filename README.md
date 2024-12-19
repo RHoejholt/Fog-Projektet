@@ -86,4 +86,4 @@ Fog-Projektet/
 
 ----------------------------------
 
-For mere information, læs venligst den fulde rapport. 
+For mere information, læs venligst den fulde rapport: https://github.com/RHoejholt/Fog-Projektet/blob/c71d5f1f1f594294ab62be1e62707ab150010b9e/Fog-projektet.pdf
