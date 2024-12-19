@@ -87,3 +87,4 @@ Fog-Projektet/
 ----------------------------------
 
 For mere information, læs venligst den fulde rapport: https://github.com/RHoejholt/Fog-Projektet/blob/c71d5f1f1f594294ab62be1e62707ab150010b9e/Fog-projektet.pdf
+Google docs version af rapporten, med bookmark funktionalitet https://docs.google.com/document/d/1uOY6E59AhleiFHnUvHrP86kKKO3EuZKv-fymhLtT0Nk/edit?usp=sharing
